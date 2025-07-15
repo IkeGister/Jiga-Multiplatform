@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.ConfigurationControl"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:JigaMultiplatform.Models"
+             x:DataType="models:AgentConfiguration"
+             x:Name="ConfigRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- Configuration Colors -->
+            <Color x:Key="ConfigBackground">#111111</Color>
+            <Color x:Key="ConfigBorder">#222222</Color>
+            <Color x:Key="LabelText">#cccccc</Color>
+            <Color x:Key="ValueText">#ffffff</Color>
+            <Color x:Key="AccentColor">#00ff88</Color>
+            <Color x:Key="DisabledColor">#666666</Color>
+            <Color x:Key="ToggleBackground">#333333</Color>
+            
+            <!-- Toggle Switch Style -->
+            <Style TargetType="Switch">
+                <Setter Property="OnColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="ThumbColor" Value="White" />
+            </Style>
+            
+            <!-- Slider Style -->
+            <Style TargetType="Slider">
+                <Setter Property="MinimumTrackColor" Value="{StaticResource AccentColor}" />
+                <Setter Property="MaximumTrackColor" Value="{StaticResource DisabledColor}" />
+                <Setter Property="ThumbColor" Value="{StaticResource AccentColor}" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Configuration Container -->
+    <ScrollView>
+        <StackLayout Spacing="16" Padding="16">
+
+            <!-- Vision Configuration Section -->
+            <Border Background="{StaticResource ConfigBackground}"
+                    Stroke="{StaticResource ConfigBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="16">
+
+                <StackLayout Spacing="12">
+                    <!-- Section Header -->
+                    <Label Text="Vision Settings"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AccentColor}" />
+
+                    <!-- High-Speed Vision Toggle -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="High-Speed Vision"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}" />
+                            <Label Text="Enable 5x faster frame processing"
+                                   FontSize="11"
+                                   TextColor="{StaticResource LabelText}" />
+                        </StackLayout>
+
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding HighSpeedVision}"
+                                VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Vision Quality Slider -->
+                    <StackLayout Spacing="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0"
+                                   Text="Vision Quality"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}"
+                                   VerticalOptions="Center" />
+
+                            <Label Grid.Column="1"
+                                   Text="{Binding VisionQualityLabel, Source={x:Reference ConfigRoot}}"
+                                   FontSize="12"
+                                   TextColor="{StaticResource AccentColor}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+
+                        <Slider Value="{Binding VisionQuality}"
+                                Minimum="0"
+                                Maximum="100"
+                                ThumbColor="{StaticResource AccentColor}" />
+
+                        <StackLayout Orientation="Horizontal" 
+                                   HorizontalOptions="FillAndExpand">
+                            <Label Text="Fast" 
+                                   FontSize="10" 
+                                   TextColor="{StaticResource LabelText}"
+                                   HorizontalOptions="Start" />
+                            <Label Text="Balanced" 
+                                   FontSize="10" 
+                                   TextColor="{StaticResource LabelText}"
+                                   HorizontalOptions="Center" />
+                            <Label Text="Quality" 
+                                   FontSize="10" 
+                                   TextColor="{StaticResource LabelText}"
+                                   HorizontalOptions="End" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!-- Video Source Selection -->
+                    <StackLayout Spacing="8">
+                        <Label Text="Video Source"
+                               FontSize="13"
+                               TextColor="{StaticResource ValueText}" />
+
+                        <Picker Title="Select Video Source"
+                                ItemsSource="{Binding VideoSources, Source={x:Reference ConfigRoot}}"
+                                SelectedItem="{Binding VideoInputSource}"
+                                FontSize="12"
+                                TextColor="{StaticResource ValueText}"
+                                TitleColor="{StaticResource LabelText}" />
+                    </StackLayout>
+                </StackLayout>
+            </Border>
+
+            <!-- Audio Configuration Section -->
+            <Border Background="{StaticResource ConfigBackground}"
+                    Stroke="{StaticResource ConfigBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="16">
+
+                <StackLayout Spacing="12">
+                    <!-- Section Header -->
+                    <Label Text="Audio Settings"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AccentColor}" />
+
+                    <!-- Voice Chat Toggle -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Voice Chat"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}" />
+                            <Label Text="Enable voice interaction with agent"
+                                   FontSize="11"
+                                   TextColor="{StaticResource LabelText}" />
+                        </StackLayout>
+
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding VoiceChatEnabled}"
+                                VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Auto Voice Activation -->
+                    <Grid IsEnabled="{Binding VoiceChatEnabled}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Auto Voice Activation"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}" />
+                            <Label Text="Automatically detect voice input"
+                                   FontSize="11"
+                                   TextColor="{StaticResource LabelText}" />
+                        </StackLayout>
+
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding AutoVoiceActivation}"
+                                VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Voice Sensitivity -->
+                    <StackLayout Spacing="8"
+                               IsEnabled="{Binding VoiceChatEnabled}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0"
+                                   Text="Voice Sensitivity"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}"
+                                   VerticalOptions="Center" />
+
+                            <Label Grid.Column="1"
+                                   Text="{Binding VoiceSensitivityLabel, Source={x:Reference ConfigRoot}}"
+                                   FontSize="12"
+                                   TextColor="{StaticResource AccentColor}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+
+                        <Slider Value="{Binding VoiceSensitivity}"
+                                Minimum="0"
+                                Maximum="100" />
+                    </StackLayout>
+                </StackLayout>
+            </Border>
+
+            <!-- Performance Configuration Section -->
+            <Border Background="{StaticResource ConfigBackground}"
+                    Stroke="{StaticResource ConfigBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="16">
+
+                <StackLayout Spacing="12">
+                    <!-- Section Header -->
+                    <Label Text="Performance Settings"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AccentColor}" />
+
+                    <!-- Performance Mode -->
+                    <StackLayout Spacing="8">
+                        <Label Text="Performance Mode"
+                               FontSize="13"
+                               TextColor="{StaticResource ValueText}" />
+
+                        <Picker Title="Select Performance Mode"
+                                ItemsSource="{Binding PerformanceModes, Source={x:Reference ConfigRoot}}"
+                                SelectedItem="{Binding PerformanceMode}"
+                                FontSize="12"
+                                TextColor="{StaticResource ValueText}"
+                                TitleColor="{StaticResource LabelText}" />
+                    </StackLayout>
+
+                    <!-- Frame Rate Limit -->
+                    <StackLayout Spacing="8">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Label Grid.Column="0"
+                                   Text="Frame Rate Limit"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}"
+                                   VerticalOptions="Center" />
+
+                            <Label Grid.Column="1"
+                                   Text="{Binding FrameRateText, Source={x:Reference ConfigRoot}}"
+                                   FontSize="12"
+                                   TextColor="{StaticResource AccentColor}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+
+                        <Slider Value="{Binding FrameRateLimit}"
+                                Minimum="1"
+                                Maximum="10" />
+                    </StackLayout>
+
+                    <!-- Memory Optimization -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Memory Optimization"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}" />
+                            <Label Text="Reduce memory usage for longer sessions"
+                                   FontSize="11"
+                                   TextColor="{StaticResource LabelText}" />
+                        </StackLayout>
+
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding MemoryOptimization}"
+                                VerticalOptions="Center" />
+                    </Grid>
+                </StackLayout>
+            </Border>
+
+            <!-- Advanced Settings Section -->
+            <Border Background="{StaticResource ConfigBackground}"
+                    Stroke="{StaticResource ConfigBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="16">
+
+                <StackLayout Spacing="12">
+                    <!-- Section Header -->
+                    <Label Text="Advanced Settings"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource AccentColor}" />
+
+                    <!-- Debug Mode -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Debug Mode"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}" />
+                            <Label Text="Enable detailed logging and diagnostics"
+                                   FontSize="11"
+                                   TextColor="{StaticResource LabelText}" />
+                        </StackLayout>
+
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding DebugMode}"
+                                VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Auto-Reconnect -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackLayout Grid.Column="0" Spacing="2">
+                            <Label Text="Auto-Reconnect"
+                                   FontSize="13"
+                                   TextColor="{StaticResource ValueText}" />
+                            <Label Text="Automatically reconnect on connection loss"
+                                   FontSize="11"
+                                   TextColor="{StaticResource LabelText}" />
+                        </StackLayout>
+
+                        <Switch Grid.Column="1"
+                                IsToggled="{Binding AutoReconnect}"
+                                VerticalOptions="Center" />
+                    </Grid>
+                </StackLayout>
+            </Border>
+
+            <!-- Configuration Actions -->
+            <StackLayout Orientation="Horizontal" 
+                       Spacing="12"
+                       HorizontalOptions="Center"
+                       Margin="0,16,0,0">
+
+                <Button Text="Reset to Defaults"
+                        FontSize="12"
+                        BackgroundColor="#444444"
+                        TextColor="{StaticResource ValueText}"
+                        CornerRadius="8"
+                        Padding="16,8"
+                        Command="{Binding ResetConfigCommand, Source={x:Reference ConfigRoot}}" />
+
+                <Button Text="Save Configuration"
+                        FontSize="12"
+                        BackgroundColor="{StaticResource AccentColor}"
+                        TextColor="#000000"
+                        CornerRadius="8"
+                        Padding="16,8"
+                        Command="{Binding SaveConfigCommand, Source={x:Reference ConfigRoot}}" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentView> 

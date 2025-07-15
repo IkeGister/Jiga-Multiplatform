@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.ChatMessageControl"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:JigaMultiplatform.ViewModels"
+             x:DataType="viewmodels:ChatMessage"
+             x:Name="ChatRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- Chat Message Colors -->
+            <Color x:Key="AgentMessageBackground">#1a2a1a</Color>
+            <Color x:Key="AgentMessageBorder">#2a3a2a</Color>
+            <Color x:Key="UserMessageBackground">#1a1a2a</Color>
+            <Color x:Key="UserMessageBorder">#2a2a3a</Color>
+            <Color x:Key="SystemMessageBackground">#2a2a1a</Color>
+            <Color x:Key="MessageText">#ffffff</Color>
+            <Color x:Key="TimestampText">#888888</Color>
+            <Color x:Key="SenderText">#00ff88</Color>
+            
+            <!-- Message Bubble Gradients -->
+            <LinearGradientBrush x:Key="AgentGradient" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1a2a1a" Offset="0" />
+                <GradientStop Color="#1a2a2a" Offset="1" />
+            </LinearGradientBrush>
+            
+            <LinearGradientBrush x:Key="UserGradient" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1a1a2a" Offset="0" />
+                <GradientStop Color="#2a1a2a" Offset="1" />
+            </LinearGradientBrush>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Chat Message Container -->
+    <Grid Margin="0,0,0,14">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Message Bubble -->
+        <Border Grid.Row="0"
+                Background="{Binding MessageBackground, Source={x:Reference ChatRoot}}"
+                Stroke="{Binding MessageBorder, Source={x:Reference ChatRoot}}"
+                StrokeThickness="1"
+                CornerRadius="{Binding MessageCornerRadius, Source={x:Reference ChatRoot}}"
+                Padding="12,10,18,10"
+                MaximumWidthRequest="320"
+                HorizontalOptions="{Binding MessageAlignment, Source={x:Reference ChatRoot}}"
+                Margin="{Binding MessageMargin, Source={x:Reference ChatRoot}}">
+
+            <!-- Drop Shadow Effect -->
+            <Border.Shadow>
+                <Shadow Brush="Black" Opacity="0.3" Radius="4" Offset="0,2" />
+            </Border.Shadow>
+
+            <StackLayout Spacing="4">
+                
+                <!-- Sender Name (for agent messages) -->
+                <Label Text="{Binding SenderName}"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource SenderText}"
+                       IsVisible="{Binding IsFromAgent}"
+                       Margin="0,0,0,2" />
+
+                <!-- Message Content -->
+                <Label Text="{Binding Text}"
+                       FontSize="15"
+                       TextColor="{StaticResource MessageText}"
+                       LineBreakMode="WordWrap"
+                       MaxLines="20" />
+
+                <!-- Audio Playback (if audio message) -->
+                <Border IsVisible="{Binding IsAudioMessage}"
+                        Background="#222b2a"
+                        Stroke="#2a3b2a"
+                        StrokeThickness="1"
+                        CornerRadius="10"
+                        Padding="8,6"
+                        Margin="0,4,0,0">
+                    
+                    <StackLayout Orientation="Horizontal" Spacing="8">
+                        
+                        <!-- Play Button -->
+                        <Button Text="▶"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               BackgroundColor="#00ff88"
+                               TextColor="#111"
+                               WidthRequest="30"
+                               HeightRequest="24"
+                               CornerRadius="12"
+                               Padding="0"
+                               Command="{Binding PlayAudioCommand, Source={x:Reference ChatRoot}}"
+                               CommandParameter="{Binding}" />
+                        
+                        <!-- Audio Duration -->
+                        <Label Text="{Binding AudioDuration}"
+                               FontSize="11"
+                               TextColor="#aaa"
+                               VerticalOptions="Center" />
+                    </StackLayout>
+                </Border>
+            </StackLayout>
+        </Border>
+
+        <!-- Timestamp -->
+        <Label Grid.Row="1"
+               Text="{Binding FormattedTimestamp}"
+               FontSize="10"
+               TextColor="{StaticResource TimestampText}"
+               HorizontalOptions="{Binding TimestampAlignment, Source={x:Reference ChatRoot}}"
+               Margin="{Binding TimestampMargin, Source={x:Reference ChatRoot}}" />
+
+        <!-- Typing Indicator (animated dots) -->
+        <StackLayout Grid.Row="0"
+                   Orientation="Horizontal"
+                   Spacing="4"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   Margin="12,8"
+                   IsVisible="{Binding IsTyping}">
+            
+            <Ellipse WidthRequest="6" HeightRequest="6" Fill="{StaticResource SenderText}">
+                <Ellipse.Triggers>
+                    <DataTrigger TargetType="Ellipse" Binding="{Binding IsTyping}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation TargetProperty="Opacity" 
+                                                   From="0.3" To="1" Duration="600"
+                                                   AutoReverse="True" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            
+            <Ellipse WidthRequest="6" HeightRequest="6" Fill="{StaticResource SenderText}">
+                <Ellipse.Triggers>
+                    <DataTrigger TargetType="Ellipse" Binding="{Binding IsTyping}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation TargetProperty="Opacity" 
+                                                   From="0.3" To="1" Duration="600"
+                                                   BeginTime="200" AutoReverse="True" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+            
+            <Ellipse WidthRequest="6" HeightRequest="6" Fill="{StaticResource SenderText}">
+                <Ellipse.Triggers>
+                    <DataTrigger TargetType="Ellipse" Binding="{Binding IsTyping}" Value="True">
+                        <DataTrigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard RepeatBehavior="Forever">
+                                    <DoubleAnimation TargetProperty="Opacity" 
+                                                   From="0.3" To="1" Duration="600"
+                                                   BeginTime="400" AutoReverse="True" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </DataTrigger.EnterActions>
+                    </DataTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </StackLayout>
+    </Grid>
+</ContentView> 

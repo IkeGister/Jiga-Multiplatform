@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.AgentBioControl"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:JigaMultiplatform.Models"
+             x:DataType="models:Agent"
+             x:Name="BioRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- Agent Bio Colors -->
+            <Color x:Key="BioBackground">#1a1a1a</Color>
+            <Color x:Key="BioBorder">#2a2a2a</Color>
+            <Color x:Key="AgentName">#ffffff</Color>
+            <Color x:Key="GameSpecialty">#00ff88</Color>
+            <Color x:Key="NationalityText">#00aaff</Color>
+            <Color x:Key="DescriptionText">#cccccc</Color>
+            <Color x:Key="StatsText">#999999</Color>
+            
+            <!-- Gradient for avatar background -->
+            <LinearGradientBrush x:Key="AvatarGradient" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#2a4a2a" Offset="0" />
+                <GradientStop Color="#1a3a1a" Offset="1" />
+            </LinearGradientBrush>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Agent Bio Container -->
+    <StackLayout Spacing="16" Padding="16">
+
+        <!-- Agent Header Section -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Agent Avatar -->
+            <Border Grid.Column="0"
+                    Background="{StaticResource AvatarGradient}"
+                    Stroke="#00ff88"
+                    StrokeThickness="2"
+                    CornerRadius="30"
+                    WidthRequest="60"
+                    HeightRequest="60">
+
+                <!-- Avatar Image or Placeholder -->
+                <Grid>
+                    <!-- Placeholder if no image -->
+                    <Label Text="{Binding AvatarInitials, Source={x:Reference BioRoot}}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#ffffff"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           IsVisible="{Binding HasNoAvatar, Source={x:Reference BioRoot}}" />
+
+                    <!-- Actual avatar image (when available) -->
+                    <Image Source="{Binding AvatarUrl}"
+                           Aspect="AspectFill"
+                           IsVisible="{Binding HasAvatar, Source={x:Reference BioRoot}}" />
+                </Grid>
+            </Border>
+
+            <!-- Agent Basic Info -->
+            <StackLayout Grid.Column="1" 
+                       Spacing="4"
+                       Margin="12,0,0,0"
+                       VerticalOptions="Center">
+
+                <!-- Agent Name -->
+                <Label Text="{Binding Name}"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource AgentName}"
+                       LineBreakMode="TailTruncation" />
+
+                <!-- Game Specialization -->
+                <Label Text="{Binding Game}"
+                       FontSize="13"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource GameSpecialty}" />
+
+                <!-- Nationality and Language -->
+                <StackLayout Orientation="Horizontal" Spacing="8">
+                    <Label Text="{Binding Nationality}"
+                           FontSize="11"
+                           TextColor="{StaticResource NationalityText}" />
+                    <Label Text="•"
+                           FontSize="11"
+                           TextColor="{StaticResource StatsText}" />
+                    <Label Text="{Binding Language}"
+                           FontSize="11"
+                           TextColor="{StaticResource NationalityText}" />
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+
+        <!-- Agent Description -->
+        <Border Background="#111111"
+                Stroke="#222222"
+                StrokeThickness="1"
+                CornerRadius="8"
+                Padding="12">
+
+            <StackLayout Spacing="8">
+                <!-- Description Header -->
+                <Label Text="About"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource GameSpecialty}" />
+
+                <!-- Description Text -->
+                <Label Text="{Binding Description}"
+                       FontSize="13"
+                       TextColor="{StaticResource DescriptionText}"
+                       LineBreakMode="WordWrap" />
+            </StackLayout>
+        </Border>
+
+        <!-- Agent Capabilities/Toolkit -->
+        <Border Background="#111111"
+                Stroke="#222222"
+                StrokeThickness="1"
+                CornerRadius="8"
+                Padding="12"
+                IsVisible="{Binding HasCapabilities, Source={x:Reference BioRoot}}">
+
+            <StackLayout Spacing="8">
+                <!-- Capabilities Header -->
+                <Label Text="Capabilities"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource GameSpecialty}" />
+
+                <!-- Toolkit Items -->
+                <CollectionView ItemsSource="{Binding Toolkit}"
+                              HeightRequest="100">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Vertical" ItemSpacing="4" />
+                    </CollectionView.ItemsLayout>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Padding="4,2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Bullet Point -->
+                                <Label Grid.Column="0"
+                                       Text="•"
+                                       FontSize="12"
+                                       TextColor="{StaticResource GameSpecialty}"
+                                       VerticalOptions="Start"
+                                       Margin="0,0,8,0" />
+
+                                <!-- Capability Text -->
+                                <Label Grid.Column="1"
+                                       Text="{Binding .}"
+                                       FontSize="12"
+                                       TextColor="{StaticResource DescriptionText}"
+                                       LineBreakMode="WordWrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </Border>
+
+        <!-- Voice Configuration -->
+        <Border Background="#111111"
+                Stroke="#222222"
+                StrokeThickness="1"
+                CornerRadius="8"
+                Padding="12"
+                IsVisible="{Binding HasVoiceId, Source={x:Reference BioRoot}}">
+
+            <StackLayout Spacing="6">
+                <!-- Voice Header -->
+                <Label Text="Voice Profile"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource GameSpecialty}" />
+
+                <!-- Voice Details -->
+                <StackLayout Orientation="Horizontal" Spacing="12">
+                    <Label Text="Voice ID:"
+                           FontSize="11"
+                           TextColor="{StaticResource StatsText}" />
+                    <Label Text="{Binding VoiceId}"
+                           FontSize="11"
+                           TextColor="{StaticResource DescriptionText}" />
+                </StackLayout>
+            </StackLayout>
+        </Border>
+    </StackLayout>
+</ContentView> 

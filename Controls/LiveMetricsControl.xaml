@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.LiveMetricsControl"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:JigaMultiplatform.ViewModels"
+             x:DataType="viewmodels:SessionMetrics"
+             x:Name="MetricsRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- Metrics Colors -->
+            <Color x:Key="MetricValue">#00ff88</Color>
+            <Color x:Key="MetricLabel">#cccccc</Color>
+            <Color x:Key="MetricSubtext">#888888</Color>
+            <Color x:Key="StatusOnline">#00ff88</Color>
+            <Color x:Key="StatusOffline">#ff4444</Color>
+            <Color x:Key="StatusWarning">#ffaa00</Color>
+            <Color x:Key="MetricBackground">#111111</Color>
+            <Color x:Key="MetricBorder">#222222</Color>
+            
+            <!-- Gradient for metric cards -->
+            <LinearGradientBrush x:Key="MetricGradient" StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#1a1a1a" Offset="0" />
+                <GradientStop Color="#111111" Offset="1" />
+            </LinearGradientBrush>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Metrics Container -->
+    <StackLayout Spacing="12" Padding="16">
+
+        <!-- Session Status Indicator -->
+        <Border Background="{StaticResource MetricBackground}"
+                Stroke="{StaticResource MetricBorder}"
+                StrokeThickness="1"
+                CornerRadius="8"
+                Padding="12">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Status Indicator -->
+                <Ellipse Grid.Column="0"
+                        WidthRequest="12"
+                        HeightRequest="12"
+                        Fill="{Binding SessionStatusColor, Source={x:Reference MetricsRoot}}"
+                        VerticalOptions="Center"
+                        Margin="0,0,8,0">
+                    
+                    <!-- Pulsing animation for online status -->
+                    <Ellipse.Triggers>
+                        <DataTrigger TargetType="Ellipse" 
+                                   Binding="{Binding IsOnline}" 
+                                   Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard RepeatBehavior="Forever">
+                                        <DoubleAnimation TargetProperty="Opacity" 
+                                                       From="1" To="0.3" Duration="1000"
+                                                       AutoReverse="True" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                        </DataTrigger>
+                    </Ellipse.Triggers>
+                </Ellipse>
+
+                <!-- Session Status Text -->
+                <StackLayout Grid.Column="1" 
+                           Spacing="2"
+                           VerticalOptions="Center">
+                    <Label Text="{Binding SessionStatus}"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource MetricValue}" />
+                    <Label Text="{Binding SessionDuration}"
+                           FontSize="11"
+                           TextColor="{StaticResource MetricSubtext}" />
+                </StackLayout>
+
+                <!-- Last Update Time -->
+                <Label Grid.Column="2"
+                       Text="{Binding LastUpdateTime}"
+                       FontSize="10"
+                       TextColor="{StaticResource MetricSubtext}"
+                       VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Key Metrics Grid -->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Frames Processed -->
+            <Border Grid.Row="0" Grid.Column="0"
+                    Background="{StaticResource MetricGradient}"
+                    Stroke="{StaticResource MetricBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    Margin="0,0,6,6">
+
+                <StackLayout Spacing="4">
+                    <Label Text="{Binding FramesProcessed}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource MetricValue}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Frames"
+                           FontSize="11"
+                           TextColor="{StaticResource MetricLabel}"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding FrameRate}"
+                           FontSize="10"
+                           TextColor="{StaticResource MetricSubtext}"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Border>
+
+            <!-- Messages Sent -->
+            <Border Grid.Row="0" Grid.Column="1"
+                    Background="{StaticResource MetricGradient}"
+                    Stroke="{StaticResource MetricBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    Margin="6,0,0,6">
+
+                <StackLayout Spacing="4">
+                    <Label Text="{Binding MessagesSent}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource MetricValue}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Messages"
+                           FontSize="11"
+                           TextColor="{StaticResource MetricLabel}"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding MessageRate}"
+                           FontSize="10"
+                           TextColor="{StaticResource MetricSubtext}"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Border>
+
+            <!-- Voice Interactions -->
+            <Border Grid.Row="1" Grid.Column="0"
+                    Background="{StaticResource MetricGradient}"
+                    Stroke="{StaticResource MetricBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    Margin="0,6,6,0">
+
+                <StackLayout Spacing="4">
+                    <Label Text="{Binding VoiceInteractions}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource MetricValue}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Voice"
+                           FontSize="11"
+                           TextColor="{StaticResource MetricLabel}"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding VoiceStatus}"
+                           FontSize="10"
+                           TextColor="{StaticResource MetricSubtext}"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Border>
+
+            <!-- Processing Speed -->
+            <Border Grid.Row="1" Grid.Column="1"
+                    Background="{StaticResource MetricGradient}"
+                    Stroke="{StaticResource MetricBorder}"
+                    StrokeThickness="1"
+                    CornerRadius="8"
+                    Padding="12"
+                    Margin="6,6,0,0">
+
+                <StackLayout Spacing="4">
+                    <Label Text="{Binding ProcessingSpeed}"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource MetricValue}"
+                           HorizontalOptions="Center" />
+                    <Label Text="Speed"
+                           FontSize="11"
+                           TextColor="{StaticResource MetricLabel}"
+                           HorizontalOptions="Center" />
+                    <Label Text="{Binding SpeedUnit}"
+                           FontSize="10"
+                           TextColor="{StaticResource MetricSubtext}"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </Border>
+        </Grid>
+
+        <!-- Connection Status -->
+        <Border Background="{StaticResource MetricBackground}"
+                Stroke="{StaticResource MetricBorder}"
+                StrokeThickness="1"
+                CornerRadius="8"
+                Padding="12">
+
+            <StackLayout Spacing="8">
+                <!-- Connection Header -->
+                <Label Text="Connections"
+                       FontSize="12"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource MetricLabel}" />
+
+                <!-- Connection Items -->
+                <StackLayout Spacing="6">
+                    
+                    <!-- Vision Stream -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Ellipse Grid.Column="0"
+                                WidthRequest="8"
+                                HeightRequest="8"
+                                Fill="{Binding VisionConnectionColor, Source={x:Reference MetricsRoot}}"
+                                VerticalOptions="Center"
+                                Margin="0,0,8,0" />
+
+                        <Label Grid.Column="1"
+                               Text="Vision Stream"
+                               FontSize="11"
+                               TextColor="{StaticResource MetricLabel}"
+                               VerticalOptions="Center" />
+
+                        <Label Grid.Column="2"
+                               Text="{Binding VisionLatency}"
+                               FontSize="10"
+                               TextColor="{StaticResource MetricSubtext}"
+                               VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Audio Stream -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Ellipse Grid.Column="0"
+                                WidthRequest="8"
+                                HeightRequest="8"
+                                Fill="{Binding AudioConnectionColor, Source={x:Reference MetricsRoot}}"
+                                VerticalOptions="Center"
+                                Margin="0,0,8,0" />
+
+                        <Label Grid.Column="1"
+                               Text="Audio Stream"
+                               FontSize="11"
+                               TextColor="{StaticResource MetricLabel}"
+                               VerticalOptions="Center" />
+
+                        <Label Grid.Column="2"
+                               Text="{Binding AudioLatency}"
+                               FontSize="10"
+                               TextColor="{StaticResource MetricSubtext}"
+                               VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- API Connection -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Ellipse Grid.Column="0"
+                                WidthRequest="8"
+                                HeightRequest="8"
+                                Fill="{Binding ApiConnectionColor, Source={x:Reference MetricsRoot}}"
+                                VerticalOptions="Center"
+                                Margin="0,0,8,0" />
+
+                        <Label Grid.Column="1"
+                               Text="API"
+                               FontSize="11"
+                               TextColor="{StaticResource MetricLabel}"
+                               VerticalOptions="Center" />
+
+                        <Label Grid.Column="2"
+                               Text="{Binding ApiLatency}"
+                               FontSize="10"
+                               TextColor="{StaticResource MetricSubtext}"
+                               VerticalOptions="Center" />
+                    </Grid>
+                </StackLayout>
+            </StackLayout>
+        </Border>
+    </StackLayout>
+</ContentView> 

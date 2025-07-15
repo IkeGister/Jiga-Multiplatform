@@ -1,0 +1,128 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/JigaMultiplatform.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+            "options": {
+                "env": {
+                    "PATH": "/usr/local/share/dotnet:${env:PATH}"
+                }
+            }
+        },
+        {
+            "label": "clean",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "clean",
+                "${workspaceFolder}/JigaMultiplatform.csproj"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+            "options": {
+                "env": {
+                    "PATH": "/usr/local/share/dotnet:${env:PATH}"
+                }
+            }
+        },
+        {
+            "label": "restore",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "restore",
+                "${workspaceFolder}/JigaMultiplatform.csproj"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent"
+            },
+            "problemMatcher": "$msCompile",
+            "options": {
+                "env": {
+                    "PATH": "/usr/local/share/dotnet:${env:PATH}"
+                }
+            }
+        },
+        {
+            "label": "build-mac",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/JigaMultiplatform.csproj",
+                "-f",
+                "net9.0-maccatalyst"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile",
+            "options": {
+                "env": {
+                    "PATH": "/usr/local/share/dotnet:${env:PATH}"
+                }
+            }
+        },
+        {
+            "label": "run-mac",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "${workspaceFolder}/JigaMultiplatform.csproj",
+                "-f",
+                "net9.0-maccatalyst"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile",
+            "dependsOn": "build-mac",
+            "options": {
+                "env": {
+                    "PATH": "/usr/local/share/dotnet:${env:PATH}"
+                }
+            }
+        },
+        {
+            "label": "watch",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "watch",
+                "run",
+                "${workspaceFolder}/JigaMultiplatform.csproj"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "isBackground": true,
+            "problemMatcher": "$msCompile",
+            "options": {
+                "env": {
+                    "PATH": "/usr/local/share/dotnet:${env:PATH}"
+                }
+            }
+        }
+    ]
+}

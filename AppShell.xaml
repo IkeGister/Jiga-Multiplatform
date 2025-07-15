@@ -3,12 +3,40 @@
     x:Class="JigaMultiplatform.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:JigaMultiplatform"
-    Title="JigaMultiplatform">
+    xmlns:views="clr-namespace:JigaMultiplatform.Views"
+    Title="JIGA Control Center"
+    BackgroundColor="#0a0a0a">
 
+    <!-- Shell Resources -->
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- JIGA Colors -->
+            <Color x:Key="Primary">#00ff88</Color>
+            <Color x:Key="PrimaryDark">#00cc66</Color>
+            <Color x:Key="Accent">#00aaff</Color>
+            <Color x:Key="Background">#0a0a0a</Color>
+            <Color x:Key="Surface">#1a1a1a</Color>
+            
+            <!-- Shell Styles -->
+            <Style TargetType="TabBar" ApplyToDerivedTypes="True">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Surface}" />
+                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.TitleColor" Value="White" />
+                <Setter Property="Shell.UnselectedColor" Value="#888888" />
+            </Style>
+            
+            <Style TargetType="FlyoutItem" ApplyToDerivedTypes="True">
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Surface}" />
+                <Setter Property="Shell.ForegroundColor" Value="White" />
+                <Setter Property="Shell.TitleColor" Value="White" />
+            </Style>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Main Content -->
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="JIGA Control Center"
+        ContentTemplate="{DataTemplate views:MainView}"
+        Route="MainView" />
 
 </Shell>

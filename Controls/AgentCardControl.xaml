@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.AgentCardControl"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:JigaMultiplatform.Models"
+             x:DataType="models:Agent">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- JIGA Agent Card Colors -->
+            <Color x:Key="CardBackground">#ffffff0d</Color>
+            <Color x:Key="CardBorder">#ffffff1a</Color>
+            <Color x:Key="CardHover">#00ff881a</Color>
+            <Color x:Key="CardActive">#00ff8833</Color>
+            <Color x:Key="CardActiveBorder">#00ff88</Color>
+            <Color x:Key="AccentGreen">#00ff88</Color>
+            <Color x:Key="AccentBlue">#00aaff</Color>
+            <Color x:Key="TextPrimary">#ffffff</Color>
+            <Color x:Key="TextSecondary">#888888</Color>
+            <Color x:Key="StatusOnline">#00ff88</Color>
+            <Color x:Key="StatusOffline">#ff4444</Color>
+            
+            <!-- Card Styles -->
+            <Style TargetType="Border" x:Key="AgentCardBorder">
+                <Setter Property="Background" Value="{StaticResource CardBackground}" />
+                <Setter Property="Stroke" Value="{StaticResource CardBorder}" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="12" />
+                <Setter Property="Padding" Value="15" />
+                <Setter Property="Margin" Value="0,0,0,15" />
+            </Style>
+            
+            <Style TargetType="Label" x:Key="AgentNameStyle">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="LineBreakMode" Value="TailTruncation" />
+            </Style>
+            
+            <Style TargetType="Label" x:Key="AgentRankStyle">
+                <Setter Property="FontSize" Value="10" />
+                <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+                <Setter Property="Margin" Value="0,0,0,5" />
+            </Style>
+            
+            <Style TargetType="Label" x:Key="AgentStatusStyle">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+                <Setter Property="VerticalOptions" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Agent Card with Visual States -->
+    <Border Style="{StaticResource AgentCardBorder}" x:Name="CardBorder">
+        
+        <!-- Visual State Manager for Selection/Hover -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup Name="SelectionStates">
+                <VisualState Name="Normal">
+                    <VisualState.Setters>
+                        <Setter TargetName="CardBorder" Property="Background" Value="{StaticResource CardBackground}" />
+                        <Setter TargetName="CardBorder" Property="Stroke" Value="{StaticResource CardBorder}" />
+                        <Setter TargetName="SelectionGlow" Property="Opacity" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                
+                <VisualState Name="Selected">
+                    <VisualState.Setters>
+                        <Setter TargetName="CardBorder" Property="Background" Value="{StaticResource CardActive}" />
+                        <Setter TargetName="CardBorder" Property="Stroke" Value="{StaticResource CardActiveBorder}" />
+                        <Setter TargetName="SelectionGlow" Property="Opacity" Value="1" />
+                    </VisualState.Setters>
+                </VisualState>
+                
+                <VisualState Name="Hover">
+                    <VisualState.Setters>
+                        <Setter TargetName="CardBorder" Property="Background" Value="{StaticResource CardHover}" />
+                        <Setter TargetName="CardBorder" Property="Stroke" Value="#00ff8850" />
+                        <Setter TargetName="HoverTransform" Property="TranslationY" Value="-2" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!-- Card Content with Transform for Hover Effect -->
+        <Grid x:Name="CardContent">
+            <Grid.Transform>
+                <TranslateTransform x:Name="HoverTransform" />
+            </Grid.Transform>
+            
+            <!-- Selection Glow Effect -->
+            <BoxView x:Name="SelectionGlow"
+                     Color="{StaticResource AccentGreen}"
+                     Opacity="0"
+                     CornerRadius="12"
+                     Margin="-2"
+                     IsVisible="False" />
+
+            <!-- Agent Card Layout -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Agent Avatar -->
+                <Border Grid.Row="0"
+                        WidthRequest="50"
+                        HeightRequest="50"
+                        CornerRadius="25"
+                        Stroke="{StaticResource CardBorder}"
+                        StrokeThickness="2"
+                        Margin="0,0,0,10"
+                        HorizontalOptions="Start">
+                    
+                    <!-- Avatar Image or Placeholder -->
+                    <Grid>
+                        <!-- Default Avatar Background (fallback) -->
+                        <Ellipse Fill="{StaticResource AccentBlue}"
+                                 WidthRequest="46"
+                                 HeightRequest="46"
+                                 IsVisible="{Binding HasAvatarUrl, Converter={StaticResource InverseBoolConverter}}" />
+                        
+                        <!-- Agent Initial (fallback) -->
+                        <Label Text="{Binding Name, Converter={StaticResource InitialConverter}}"
+                               FontSize="20"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"
+                               IsVisible="{Binding HasAvatarUrl, Converter={StaticResource InverseBoolConverter}}" />
+                        
+                        <!-- Actual avatar image -->
+                        <Image Source="{Binding AvatarUrl}"
+                               Aspect="AspectFill"
+                               WidthRequest="46"
+                               HeightRequest="46"
+                               IsVisible="{Binding HasAvatarUrl}" />
+                    </Grid>
+                </Border>
+
+                <!-- Agent Information -->
+                <StackLayout Grid.Row="1" 
+                           Spacing="5"
+                           IsVisible="{Binding Source={x:Reference CardContent}, Path=BindingContext.IsSidebarExpanded, FallbackValue=True}">
+                    
+                    <!-- Agent Name -->
+                    <Label Text="{Binding Name}"
+                           Style="{StaticResource AgentNameStyle}" />
+                    
+                    <!-- Rank and Type -->
+                    <Label Style="{StaticResource AgentRankStyle}">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="{Binding Rank}" />
+                                <Span Text=" " />
+                                <Span Text="{Binding Type}" />
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+
+                <!-- Agent Status -->
+                <StackLayout Grid.Row="2"
+                           Orientation="Horizontal"
+                           Spacing="5"
+                           Margin="0,5,0,0"
+                           IsVisible="{Binding Source={x:Reference CardContent}, Path=BindingContext.IsSidebarExpanded, FallbackValue=True}">
+                    
+                    <!-- Status Dot -->
+                    <Ellipse WidthRequest="8"
+                             HeightRequest="8"
+                             Fill="{Binding IsOnline, Converter={StaticResource StatusColorConverter}}"
+                             VerticalOptions="Center">
+                        
+                        <!-- Pulse Effect for Online Status -->
+                        <Ellipse.Triggers>
+                            <DataTrigger TargetType="Ellipse" Binding="{Binding IsOnline}" Value="True">
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimation TargetProperty="Opacity"
+                                                           From="1" To="0.3" Duration="1000"
+                                                           AutoReverse="True" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+                            </DataTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                    
+                    <!-- Status Text -->
+                    <Label Text="{Binding StatusText}"
+                           Style="{StaticResource AgentStatusStyle}" />
+                </StackLayout>
+
+                <!-- Specialization Tags (Collapsed View) -->
+                <StackLayout Grid.Row="3"
+                           Orientation="Horizontal"
+                           Spacing="3"
+                           Margin="0,8,0,0"
+                           IsVisible="{Binding Source={x:Reference CardContent}, Path=BindingContext.IsSidebarExpanded, FallbackValue=True}">
+                    
+                    <!-- Primary Game Tag -->
+                    <Border BackgroundColor="#22313a"
+                            Stroke="#2a3b3f"
+                            StrokeThickness="1"
+                            CornerRadius="10"
+                            Padding="6,2"
+                            IsVisible="{Binding HasSpecialization}">
+                        <Label Text="{Binding PrimaryGame}"
+                               FontSize="9"
+                               FontAttributes="Bold"
+                               TextColor="#aaffcc"
+                               LetterSpacing="0.5" />
+                    </Border>
+                    
+                    <!-- Specialist Focus Tag -->
+                    <Border BackgroundColor="#2a2a3a"
+                            Stroke="#2a3b3f"
+                            StrokeThickness="1"
+                            CornerRadius="10"
+                            Padding="6,2"
+                            IsVisible="{Binding HasSpecializationFocus}">
+                        <Label Text="{Binding SpecializationFocus}"
+                               FontSize="9"
+                               FontAttributes="Bold"
+                               TextColor="#aaccff"
+                               LetterSpacing="0.5" />
+                    </Border>
+                </StackLayout>
+            </Grid>
+        </Grid>
+
+        <!-- Gesture Recognizers -->
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Source={x:Reference CardContent}, Path=BindingContext.SelectAgentCommand}"
+                                CommandParameter="{Binding}" />
+        </Border.GestureRecognizers>
+    </Border>
+</ContentView> 

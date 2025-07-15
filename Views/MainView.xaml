@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="JigaMultiplatform.Views.MainView"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:JigaMultiplatform.Controls"
+             xmlns:viewmodels="clr-namespace:JigaMultiplatform.ViewModels"
+             x:DataType="viewmodels:MainViewModel"
+             Title="JIGA Control Center"
+             BackgroundColor="#0a0a0a">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- JIGA Color Scheme -->
+            <Color x:Key="PrimaryBackground">#0a0a0a</Color>
+            <Color x:Key="SecondaryBackground">#1a1a1a</Color>
+            <Color x:Key="TertiaryBackground">#2a2a2a</Color>
+            <Color x:Key="AccentColor">#00ff88</Color>
+            <Color x:Key="AccentBlue">#00aaff</Color>
+            <Color x:Key="TextPrimary">#ffffff</Color>
+            <Color x:Key="TextSecondary">#888888</Color>
+            <Color x:Key="BorderColor">#333333</Color>
+            <Color x:Key="DangerColor">#ff4444</Color>
+            
+            <!-- Gradients -->
+            <LinearGradientBrush x:Key="SidebarGradient" StartPoint="0,0" EndPoint="0,1">
+                <GradientStop Color="#1a1a1a" Offset="0" />
+                <GradientStop Color="#2a2a2a" Offset="1" />
+            </LinearGradientBrush>
+            
+            <LinearGradientBrush x:Key="HeaderGradient" StartPoint="0,0" EndPoint="1,0">
+                <GradientStop Color="#1a1a1a" Offset="0" />
+                <GradientStop Color="#2a2a2a" Offset="1" />
+            </LinearGradientBrush>
+
+            <!-- Styles -->
+            <Style TargetType="Label" x:Key="HeaderTitleStyle">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="LetterSpacing" Value="2" />
+            </Style>
+            
+            <Style TargetType="Label" x:Key="SectionTitleStyle">
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
+                <Setter Property="LetterSpacing" Value="1" />
+            </Style>
+            
+            <Style TargetType="Button" x:Key="ControlButtonPrimaryStyle">
+                <Setter Property="BackgroundColor" Value="#183b6b" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="BorderColor" Value="#183b6b" />
+                <Setter Property="BorderWidth" Value="2" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Padding" Value="12,12" />
+            </Style>
+            
+            <Style TargetType="Button" x:Key="ControlButtonSecondaryStyle">
+                <Setter Property="BackgroundColor" Value="#222b3a" />
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
+                <Setter Property="BorderColor" Value="#2a3b5c" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Padding" Value="12,12" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!-- Main Three-Panel Layout -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <!-- Left Sidebar -->
+            <ColumnDefinition Width="{Binding SidebarWidth}" />
+            <!-- Main Content -->
+            <ColumnDefinition Width="*" />
+            <!-- Right Panel -->
+            <ColumnDefinition Width="{Binding RightPanelWidth}" />
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT SIDEBAR: Agent Selection -->
+        <Border Grid.Column="0" 
+                Background="{StaticResource SidebarGradient}"
+                Stroke="{StaticResource BorderColor}"
+                StrokeThickness="1">
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Sidebar Header -->
+                <Border Grid.Row="0"
+                        Background="Transparent"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeThickness="0,0,0,1"
+                        Padding="20">
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- JIGA Logo -->
+                        <StackLayout Grid.Column="0" IsVisible="{Binding IsSidebarExpanded}" Spacing="6" HorizontalOptions="Start">
+                            <Image Source="Jiga-Icon-v1.png"
+                                   HeightRequest="64"
+                                   WidthRequest="64"
+                                   Aspect="AspectFit"
+                                   HorizontalOptions="Start" />
+                            <Label Text="Joint Intelligence Gaming Assistants"
+                                   FontSize="11"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   LetterSpacing="1"
+                                   HorizontalOptions="Start" />
+                        </StackLayout>
+
+                        <!-- Collapse Button -->
+                        <Button Grid.Column="1"
+                                Text="☰"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource TextSecondary}"
+                                BorderWidth="0"
+                                FontSize="18"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                Command="{Binding ToggleSidebarCommand}" />
+                    </Grid>
+                </Border>
+
+                <!-- Agents Section -->
+                <ScrollView Grid.Row="1" Padding="20">
+                    <StackLayout Spacing="15">
+                        
+                        <!-- Section Title -->
+                        <Label Text="AGENTS" 
+                               Style="{StaticResource SectionTitleStyle}"
+                               IsVisible="{Binding IsSidebarExpanded}" />
+
+                        <!-- Agent Cards -->
+                        <CollectionView ItemsSource="{Binding AvailableAgents}"
+                                      SelectedItem="{Binding SelectedAgent}"
+                                      SelectionMode="Single">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <controls:AgentCardControl />
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+                    </StackLayout>
+                </ScrollView>
+            </Grid>
+        </Border>
+
+        <!-- MAIN CONTENT AREA -->
+        <Grid Grid.Column="1" BackgroundColor="{StaticResource PrimaryBackground}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Main Header -->
+            <Border Grid.Row="0"
+                    Background="{StaticResource HeaderGradient}"
+                    Stroke="{StaticResource BorderColor}"
+                    StrokeThickness="0,0,0,1"
+                    Padding="30,20">
+                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Agent Title and Video Sources -->
+                    <StackLayout Grid.Column="0" Orientation="Horizontal" Spacing="18">
+                        
+                        <!-- Selected Agent Info -->
+                        <StackLayout Orientation="Horizontal" Spacing="18"
+                                   IsVisible="{Binding HasSelectedAgent}">
+                            <Ellipse WidthRequest="40" HeightRequest="40"
+                                   Fill="{Binding SelectedAgent.AvatarBrush}" />
+                            <Label Text="{Binding SelectedAgent.Name}"
+                                   Style="{StaticResource HeaderTitleStyle}"
+                                   VerticalOptions="Center" />
+                        </StackLayout>
+
+                        <!-- Video Source Selection -->
+                        <StackLayout Orientation="Horizontal" Spacing="32"
+                                   IsVisible="{Binding HasSelectedAgent}">
+                            
+                            <!-- Twitch Source -->
+                            <controls:VideoSourceButton 
+                                SourceType="Twitch"
+                                IsSelected="{Binding IsTwitchSelected}"
+                                Command="{Binding SelectVideoSourceCommand}"
+                                CommandParameter="twitch" />
+                                
+                            <!-- YouTube Source -->
+                            <controls:VideoSourceButton 
+                                SourceType="YouTube" 
+                                IsSelected="{Binding IsYouTubeSelected}"
+                                Command="{Binding SelectVideoSourceCommand}"
+                                CommandParameter="youtube" />
+                                
+                            <!-- Direct Source -->
+                            <controls:VideoSourceButton 
+                                SourceType="Direct"
+                                IsSelected="{Binding IsDirectSelected}"
+                                Command="{Binding SelectVideoSourceCommand}"
+                                CommandParameter="direct" />
+                                
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!-- Connection Status -->
+                    <Border Grid.Column="1"
+                            BackgroundColor="{Binding ConnectionStatusColor}"
+                            Stroke="{Binding ConnectionStatusBorderColor}"
+                            StrokeThickness="1"
+                            CornerRadius="20"
+                            Padding="16,8">
+                        
+                        <StackLayout Orientation="Horizontal" Spacing="8">
+                            <Ellipse WidthRequest="8" HeightRequest="8"
+                                   Fill="{Binding ConnectionStatusColor}" />
+                            <Label Text="{Binding ConnectionStatusText}"
+                                   TextColor="{Binding ConnectionStatusTextColor}"
+                                   FontSize="12"
+                                   FontAttributes="Bold" />
+                        </StackLayout>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- Main Body Content -->
+            <ScrollView Grid.Row="1" Padding="30">
+                <StackLayout Spacing="30">
+
+                    <!-- Welcome Screen (when no agent selected) -->
+                    <Grid IsVisible="{Binding ShowWelcomeScreen}">
+                        
+                        <!-- Welcome Background Image -->
+                        <Image Source="5Dof-Quote-No1-v3.png"
+                               Aspect="AspectFill"
+                               Opacity="0.38"
+                               HorizontalOptions="Fill"
+                               VerticalOptions="Fill" />
+                        
+                        <!-- Welcome Content Overlay -->
+                        <StackLayout VerticalOptions="CenterAndExpand"
+                                   HorizontalOptions="CenterAndExpand"
+                                   Spacing="20">
+                            
+                            <Label Text="Welcome to JIGA Control Center"
+                                   FontSize="32"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   HorizontalOptions="Center"
+                                   FontAttributes="Bold" />
+                                   
+                            <Label Text="Select an agent from the sidebar to begin monitoring and control"
+                                   FontSize="16"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   HorizontalOptions="Center" />
+                        </StackLayout>
+                    </Grid>
+
+                    <!-- Agent Interface (when agent selected) -->
+                    <StackLayout IsVisible="{Binding HasSelectedAgent}" Spacing="20">
+
+                        <!-- Output Window (Chat/Communication) -->
+                        <Border Background="#000000BB"
+                                Stroke="#ffffff20"
+                                StrokeThickness="1"
+                                CornerRadius="14"
+                                Padding="24,24,18,18"
+                                MinimumHeightRequest="340"
+                                MaximumHeightRequest="520">
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Voice Chat Status -->
+                                <StackLayout Grid.Row="0" 
+                                           Orientation="Horizontal" 
+                                           Spacing="6"
+                                           HorizontalOptions="End">
+                                    <Label Text="🎤" FontSize="22" />
+                                    <Label Text="Voice Chat" 
+                                           FontSize="12"
+                                           TextColor="{StaticResource TextSecondary}"
+                                           FontAttributes="Bold" />
+                                </StackLayout>
+
+                                <!-- Chat Messages -->
+                                <CollectionView Grid.Row="1" 
+                                              ItemsSource="{Binding ChatMessages}"
+                                              Margin="0,8,0,0">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <controls:ChatMessageControl />
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Grid>
+                        </Border>
+
+                        <!-- Control Panel -->
+                        <Border Background="#ffffff0d"
+                                Stroke="#ffffff1a"
+                                StrokeThickness="1"
+                                CornerRadius="12"
+                                Padding="16">
+                            
+                            <StackLayout Spacing="15">
+                                
+                                <!-- Control Buttons -->
+                                <FlexLayout Wrap="Wrap" 
+                                          Direction="Row"
+                                          JustifyContent="Start"
+                                          AlignItems="Start">
+                                    
+                                    <CollectionView ItemsSource="{Binding ControlActions}"
+                                                  x:Name="ControlButtonsCollection">
+                                        <CollectionView.ItemsLayout>
+                                            <GridItemsLayout Orientation="Vertical" Span="4" />
+                                        </CollectionView.ItemsLayout>
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <controls:ControlButtonControl Margin="0,0,15,15" />
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </FlexLayout>
+                            </StackLayout>
+                        </Border>
+
+                        <!-- Activity Log -->
+                        <Border Background="#00000080"
+                                Stroke="#ffffff1a"
+                                StrokeThickness="1"
+                                CornerRadius="12"
+                                Padding="0"
+                                Margin="0,32,0,0">
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="180" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Log Header -->
+                                <StackLayout Grid.Row="0" 
+                                           Orientation="Horizontal"
+                                           Padding="20,20,20,0">
+                                    <Label Text="{Binding SelectedAgent.Name, StringFormat='{0} Activity'}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource TextPrimary}" />
+                                </StackLayout>
+
+                                <!-- Log Container -->
+                                <Border Grid.Row="1"
+                                        Background="#00000080"
+                                        Stroke="#ffffff1a"
+                                        StrokeThickness="1"
+                                        CornerRadius="8"
+                                        Margin="20,16,20,20">
+                                    
+                                    <CollectionView ItemsSource="{Binding ActivityLog}"
+                                                  BackgroundColor="Transparent"
+                                                  Margin="15">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <controls:LogEntryControl />
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Agent Status Data -->
+                        <Border Background="#00000080"
+                                Stroke="#ffffff1a"
+                                StrokeThickness="1"
+                                CornerRadius="12"
+                                Padding="0"
+                                Margin="0,18,0,0">
+                            
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="200" />
+                                </Grid.RowDefinitions>
+
+                                <!-- Status Header -->
+                                <StackLayout Grid.Row="0" 
+                                           Orientation="Horizontal"
+                                           Padding="20,20,20,0">
+                                    <Label Text="Agent Status"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource TextPrimary}" />
+                                </StackLayout>
+
+                                <!-- Status Data -->
+                                <ScrollView Grid.Row="1" Margin="20,16,20,20">
+                                    <Label Text="{Binding AgentStatusJson}"
+                                           FontFamily="Consolas, Monaco, monospace"
+                                           FontSize="12"
+                                           TextColor="{StaticResource TextPrimary}"
+                                           BackgroundColor="#00000080" />
+                                </ScrollView>
+                            </Grid>
+                        </Border>
+
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+
+        <!-- RIGHT PANEL: Agent Stats & Settings -->
+        <Border Grid.Column="2"
+                Background="{StaticResource SidebarGradient}"
+                Stroke="{StaticResource BorderColor}"
+                StrokeThickness="1,0,0,0"
+                IsVisible="{Binding IsRightPanelVisible}">
+            
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Right Panel Header -->
+                <Border Grid.Row="0"
+                        Background="Transparent"
+                        Stroke="{StaticResource BorderColor}"
+                        StrokeThickness="0,0,0,1"
+                        Padding="20">
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Column="0"
+                               Text="Agent Stats &amp; Settings"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource TextPrimary}"
+                               LetterSpacing="1"
+                               IsVisible="{Binding IsRightPanelExpanded}" />
+
+                        <!-- Collapse Button -->
+                        <Button Grid.Column="1"
+                                Text="☰"
+                                BackgroundColor="Transparent"
+                                TextColor="{StaticResource TextSecondary}"
+                                BorderWidth="0"
+                                FontSize="18"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                Command="{Binding ToggleRightPanelCommand}" />
+                    </Grid>
+                </Border>
+
+                <!-- Right Panel Content -->
+                <ScrollView Grid.Row="1" Padding="20">
+                    <StackLayout Spacing="20">
+
+                        <!-- Agent Bio Section -->
+                        <controls:CollapsibleSection Title="AGENT BIO"
+                                                   Icon="👤"
+                                                   IsExpanded="True">
+                            <controls:AgentBioControl DataContext="{Binding SelectedAgent}" />
+                        </controls:CollapsibleSection>
+
+                        <!-- Live Metrics Section -->
+                        <controls:CollapsibleSection Title="LIVE METRICS"
+                                                   Icon="📊"
+                                                   IsExpanded="True">
+                            <controls:LiveMetricsControl DataContext="{Binding LiveMetrics}" />
+                        </controls:CollapsibleSection>
+
+                        <!-- Configuration Section -->
+                        <controls:CollapsibleSection Title="CONFIGURATION"
+                                                   Icon="⚙️"
+                                                   IsExpanded="True">
+                            <controls:ConfigurationControl DataContext="{Binding AgentConfiguration}" />
+                        </controls:CollapsibleSection>
+
+                    </StackLayout>
+                </ScrollView>
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage> 

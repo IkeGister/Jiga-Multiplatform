@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.ControlButtonControl"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:services="clr-namespace:JigaMultiplatform.Services"
+             x:DataType="services:AgentControlAction"
+             x:Name="ControlRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- JIGA Control Button Colors -->
+            <Color x:Key="PrimaryBackground">#183b6b</Color>
+            <Color x:Key="PrimaryHover">#2356a8</Color>
+            <Color x:Key="PrimaryBorder">#00aaff</Color>
+            <Color x:Key="SecondaryBackground">#222b3a</Color>
+            <Color x:Key="SecondaryBorder">#2a3b5c</Color>
+            <Color x:Key="DangerBackground">#ff4444</Color>
+            <Color x:Key="DangerHover">#cc3333</Color>
+            <Color x:Key="TextColor">#ffffff</Color>
+            
+            <!-- Button Styles by Type -->
+            <Style TargetType="Border" x:Key="PrimaryButtonStyle">
+                <Setter Property="Background" Value="{StaticResource PrimaryBackground}" />
+                <Setter Property="Stroke" Value="{StaticResource PrimaryBackground}" />
+                <Setter Property="StrokeThickness" Value="2" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="12,12" />
+            </Style>
+            
+            <Style TargetType="Border" x:Key="SecondaryButtonStyle">
+                <Setter Property="Background" Value="{StaticResource SecondaryBackground}" />
+                <Setter Property="Stroke" Value="{StaticResource SecondaryBorder}" />
+                <Setter Property="StrokeThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="12,12" />
+            </Style>
+            
+            <Style TargetType="Border" x:Key="DangerButtonStyle">
+                <Setter Property="Background" Value="{StaticResource DangerBackground}" />
+                <Setter Property="Stroke" Value="{StaticResource DangerBackground}" />
+                <Setter Property="StrokeThickness" Value="2" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="12,12" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Dynamic Button Border -->
+    <Border x:Name="ButtonBorder"
+            Style="{Binding ButtonStyle, Source={x:Reference ControlRoot}}"
+            MinimumWidthRequest="100">
+        
+        <!-- Visual State Manager for Hover/Press Effects -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup Name="CommonStates">
+                <VisualState Name="Normal">
+                    <VisualState.Setters>
+                        <Setter TargetName="ButtonBorder" Property="Opacity" Value="1.0" />
+                        <Setter TargetName="ButtonGlow" Property="Opacity" Value="0" />
+                    </VisualState.Setters>
+                </VisualState>
+                
+                <VisualState Name="Pressed">
+                    <VisualState.Setters>
+                        <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.8" />
+                        <Setter TargetName="ButtonGlow" Property="Opacity" Value="0.8" />
+                        <Setter TargetName="ButtonTransform" Property="ScaleX" Value="0.98" />
+                        <Setter TargetName="ButtonTransform" Property="ScaleY" Value="0.98" />
+                    </VisualState.Setters>
+                </VisualState>
+                
+                <VisualState Name="PointerOver">
+                    <VisualState.Setters>
+                        <Setter TargetName="ButtonBorder" Property="Stroke" Value="{StaticResource PrimaryBorder}" />
+                        <Setter TargetName="ButtonGlow" Property="Opacity" Value="0.4" />
+                    </VisualState.Setters>
+                </VisualState>
+                
+                <VisualState Name="Disabled">
+                    <VisualState.Setters>
+                        <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.5" />
+                        <Setter TargetName="ButtonContent" Property="Opacity" Value="0.5" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <!-- Button Transform for Press Effect -->
+        <Border.RenderTransform>
+            <ScaleTransform x:Name="ButtonTransform" ScaleX="1" ScaleY="1" />
+        </Border.RenderTransform>
+
+        <!-- Button Glow Effect -->
+        <Border x:Name="ButtonGlow"
+                Background="Transparent"
+                Stroke="{StaticResource PrimaryBorder}"
+                StrokeThickness="2"
+                CornerRadius="8"
+                Opacity="0"
+                Margin="-2" />
+
+        <!-- Button Content -->
+        <StackLayout x:Name="ButtonContent"
+                   Orientation="Horizontal" 
+                   Spacing="8"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center">
+            
+            <!-- Button Icon (if available) -->
+            <Label x:Name="IconLabel"
+                   Text="{Binding Icon}"
+                   FontSize="16"
+                   TextColor="{StaticResource TextColor}"
+                   VerticalOptions="Center"
+                   IsVisible="{Binding HasIcon, Source={x:Reference ControlRoot}}" />
+            
+            <!-- Button Text -->
+            <Label Text="{Binding Text}"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="{StaticResource TextColor}"
+                   VerticalOptions="Center"
+                   LineBreakMode="NoWrap" />
+        </StackLayout>
+
+        <!-- Gesture Recognizers -->
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding ExecuteCommand, Source={x:Reference ControlRoot}}"
+                                CommandParameter="{Binding .}" />
+        </Border.GestureRecognizers>
+    </Border>
+</ContentView> 

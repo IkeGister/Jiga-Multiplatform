@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.CollapsibleSection"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="SectionRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- Section Colors -->
+            <Color x:Key="SectionBackground">#1a1a1a</Color>
+            <Color x:Key="SectionBorder">#2a2a2a</Color>
+            <Color x:Key="HeaderBackground">#222222</Color>
+            <Color x:Key="HeaderText">#ffffff</Color>
+            <Color x:Key="ChevronColor">#00ff88</Color>
+            <Color x:Key="ContentBackground">#181818</Color>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Section Container -->
+    <Border Background="{StaticResource SectionBackground}"
+            Stroke="{StaticResource SectionBorder}"
+            StrokeThickness="1"
+            CornerRadius="8"
+            Margin="0,0,0,12">
+
+        <StackLayout Spacing="0">
+            
+            <!-- Section Header -->
+            <Border Background="{StaticResource HeaderBackground}"
+                    CornerRadius="8,8,0,0"
+                    Padding="12,10">
+
+                <!-- Header Content -->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Section Title -->
+                    <Label Grid.Column="0"
+                           Text="{Binding Title, Source={x:Reference SectionRoot}}"
+                           FontSize="14"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource HeaderText}"
+                           VerticalOptions="Center" />
+
+                    <!-- Expand/Collapse Chevron -->
+                    <Label Grid.Column="1"
+                           x:Name="ChevronIcon"
+                           Text="▼"
+                           FontSize="12"
+                           TextColor="{StaticResource ChevronColor}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center">
+                        
+                        <!-- Rotation Transform for Animation -->
+                        <Label.RenderTransform>
+                            <RotateTransform x:Name="ChevronRotation" Angle="0" />
+                        </Label.RenderTransform>
+                    </Label>
+                </Grid>
+
+                <!-- Header Tap Gesture -->
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHeaderTapped" />
+                </Border.GestureRecognizers>
+            </Border>
+
+            <!-- Collapsible Content Container -->
+            <ContentView x:Name="ContentContainer"
+                        Background="{StaticResource ContentBackground}"
+                        IsVisible="{Binding IsExpanded, Source={x:Reference SectionRoot}}"
+                        Padding="12">
+
+                <!-- Custom Content Placeholder -->
+                <ContentPresenter Content="{Binding Content, Source={x:Reference SectionRoot}}" />
+            </ContentView>
+        </StackLayout>
+    </Border>
+</ContentView> 

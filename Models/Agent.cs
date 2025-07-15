@@ -56,6 +56,28 @@ public class Agent
     [JsonIgnore]
     public string CapabilitiesText => string.Join(", ", GetCapabilities());
 
+    // UI Helper Properties for AgentCardControl
+    [JsonIgnore]
+    public bool IsOnline { get; set; } = false; // Will be updated based on session status
+    
+    [JsonIgnore]
+    public string StatusText => IsOnline ? "Online" : "Offline";
+    
+    [JsonIgnore]
+    public bool HasSpecialization => Specialization?.Games?.Any() == true;
+    
+    [JsonIgnore]
+    public string PrimaryGame => Specialization?.Games?.FirstOrDefault() ?? "";
+    
+    [JsonIgnore]
+    public bool HasSpecializationFocus => !string.IsNullOrEmpty(Specialization?.Focus);
+    
+    [JsonIgnore]
+    public string SpecializationFocus => Specialization?.Focus ?? "";
+    
+    [JsonIgnore]
+    public bool HasAvatarUrl => !string.IsNullOrEmpty(AvatarUrl);
+
     private IEnumerable<string> GetCapabilities()
     {
         var capabilities = new List<string>();

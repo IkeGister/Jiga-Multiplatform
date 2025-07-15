@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- JIGA Color Palette -->
+    <Color x:Key="JigaPrimary">#0a0a0a</Color>
+    <Color x:Key="JigaSecondary">#1a1a1a</Color>
+    <Color x:Key="JigaTertiary">#2a2a2a</Color>
+    <Color x:Key="JigaAccent">#00ff88</Color>
+    <Color x:Key="JigaBlue">#00aaff</Color>
+    <Color x:Key="JigaWhite">#ffffff</Color>
+    <Color x:Key="JigaGray">#888888</Color>
+    <Color x:Key="JigaLightGray">#cccccc</Color>
+    <Color x:Key="JigaDanger">#ff4444</Color>
+    <Color x:Key="JigaWarning">#ffaa00</Color>
+    <Color x:Key="JigaSuccess">#00ff88</Color>
+
+    <!-- Background Colors -->
+    <Color x:Key="PageBackground">{StaticResource JigaPrimary}</Color>
+    <Color x:Key="SurfaceBackground">{StaticResource JigaSecondary}</Color>
+    <Color x:Key="CardBackground">#111111</Color>
+    <Color x:Key="BorderColor">{StaticResource JigaTertiary}</Color>
+
+    <!-- Text Colors -->
+    <Color x:Key="PrimaryText">{StaticResource JigaWhite}</Color>
+    <Color x:Key="SecondaryText">{StaticResource JigaLightGray}</Color>
+    <Color x:Key="TertiaryText">{StaticResource JigaGray}</Color>
+    <Color x:Key="AccentText">{StaticResource JigaAccent}</Color>
+
+    <!-- JIGA Gradients -->
+    <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#0a0a0a" Offset="0" />
+        <GradientStop Color="#1a1a1a" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#00ff88" Offset="0" />
+        <GradientStop Color="#00cc66" Offset="1" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="CardGradient" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#1a1a1a" Offset="0" />
+        <GradientStop Color="#111111" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Global Page Style -->
+    <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource PageBackground}" />
+        <Setter Property="Shell.BackgroundColor" Value="{StaticResource PageBackground}" />
+        <Setter Property="Shell.ForegroundColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="Shell.TitleColor" Value="{StaticResource PrimaryText}" />
+    </Style>
+
+    <!-- Shell Styling -->
+    <Style TargetType="Shell" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource PageBackground}" />
+        <Setter Property="ForegroundColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="TitleColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="DisabledColor" Value="{StaticResource JigaGray}" />
+        <Setter Property="UnselectedColor" Value="{StaticResource TertiaryText}" />
+        <Setter Property="NavBarHasShadow" Value="False" />
+        <Setter Property="TabBarBackgroundColor" Value="{StaticResource SurfaceBackground}" />
+        <Setter Property="TabBarForegroundColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="TabBarTitleColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="TabBarUnselectedColor" Value="{StaticResource TertiaryText}" />
+    </Style>
+
+    <!-- JIGA Label Styles -->
+    <Style x:Key="HeaderTitleStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource AccentText}" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="SectionHeaderStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+
+    <Style x:Key="SubheaderStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource AccentText}" />
+        <Setter Property="Margin" Value="0,0,0,4" />
+    </Style>
+
+    <Style x:Key="BodyTextStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource SecondaryText}" />
+        <Setter Property="LineBreakMode" Value="WordWrap" />
+    </Style>
+
+    <Style x:Key="CaptionTextStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="TextColor" Value="{StaticResource TertiaryText}" />
+    </Style>
+
+    <!-- JIGA Button Styles -->
+    <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource JigaAccent}" />
+        <Setter Property="TextColor" Value="#000000" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="BorderWidth" Value="0" />
+        <Setter Property="Shadow">
+            <Shadow Brush="Black" Opacity="0.3" Radius="4" Offset="0,2" />
+        </Setter>
+    </Style>
+
+    <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceBackground}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="BorderColor" Value="{StaticResource BorderColor}" />
+        <Setter Property="BorderWidth" Value="1" />
+    </Style>
+
+    <Style x:Key="DangerButtonStyle" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource JigaDanger}" />
+        <Setter Property="TextColor" Value="{StaticResource JigaWhite}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16,12" />
+        <Setter Property="BorderWidth" Value="0" />
+    </Style>
+
+    <!-- JIGA Border/Card Styles -->
+    <Style x:Key="CardStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
+        <Setter Property="Stroke" Value="{StaticResource BorderColor}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="8" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Shadow">
+            <Shadow Brush="Black" Opacity="0.2" Radius="4" Offset="0,2" />
+        </Setter>
+    </Style>
+
+    <Style x:Key="AccentCardStyle" TargetType="Border" BasedOn="{StaticResource CardStyle}">
+        <Setter Property="Background" Value="{StaticResource CardGradient}" />
+        <Setter Property="Stroke" Value="{StaticResource JigaAccent}" />
+        <Setter Property="StrokeThickness" Value="2" />
+    </Style>
+
+    <!-- JIGA Entry Styles -->
+    <Style TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceBackground}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="PlaceholderColor" Value="{StaticResource TertiaryText}" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- JIGA Picker Styles -->
+    <Style TargetType="Picker">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceBackground}" />
+        <Setter Property="TextColor" Value="{StaticResource PrimaryText}" />
+        <Setter Property="TitleColor" Value="{StaticResource TertiaryText}" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <!-- JIGA Switch Styles -->
+    <Style TargetType="Switch">
+        <Setter Property="OnColor" Value="{StaticResource JigaAccent}" />
+        <Setter Property="ThumbColor" Value="{StaticResource JigaWhite}" />
+    </Style>
+
+    <!-- JIGA Slider Styles -->
+    <Style TargetType="Slider">
+        <Setter Property="MinimumTrackColor" Value="{StaticResource JigaAccent}" />
+        <Setter Property="MaximumTrackColor" Value="{StaticResource BorderColor}" />
+        <Setter Property="ThumbColor" Value="{StaticResource JigaAccent}" />
+    </Style>
+
+    <!-- JIGA Progress Bar Styles -->
+    <Style TargetType="ProgressBar">
+        <Setter Property="ProgressColor" Value="{StaticResource JigaAccent}" />
+        <Setter Property="BackgroundColor" Value="{StaticResource BorderColor}" />
+    </Style>
+
+    <!-- JIGA Activity Indicator -->
+    <Style TargetType="ActivityIndicator">
+        <Setter Property="Color" Value="{StaticResource JigaAccent}" />
+    </Style>
+
+    <!-- JIGA ScrollView Styles -->
+    <Style TargetType="ScrollView">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+    <!-- JIGA Collection View Styles -->
+    <Style TargetType="CollectionView">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+    </Style>
+
+    <!-- Status Indicator Styles -->
+    <Style x:Key="OnlineStatusStyle" TargetType="Ellipse">
+        <Setter Property="Fill" Value="{StaticResource JigaSuccess}" />
+        <Setter Property="WidthRequest" Value="12" />
+        <Setter Property="HeightRequest" Value="12" />
+    </Style>
+
+    <Style x:Key="OfflineStatusStyle" TargetType="Ellipse">
+        <Setter Property="Fill" Value="{StaticResource JigaDanger}" />
+        <Setter Property="WidthRequest" Value="12" />
+        <Setter Property="HeightRequest" Value="12" />
+    </Style>
+
+    <Style x:Key="WarningStatusStyle" TargetType="Ellipse">
+        <Setter Property="Fill" Value="{StaticResource JigaWarning}" />
+        <Setter Property="WidthRequest" Value="12" />
+        <Setter Property="HeightRequest" Value="12" />
+    </Style>
+
+    <!-- Animation Styles -->
+    <Style x:Key="PulseStyle" TargetType="VisualElement">
+        <!-- Pulsing animation will be applied programmatically -->
+    </Style>
+
+    <!-- Sidebar Styles -->
+    <Style x:Key="SidebarStyle" TargetType="StackLayout">
+        <Setter Property="BackgroundColor" Value="{StaticResource SurfaceBackground}" />
+        <Setter Property="Padding" Value="16" />
+        <Setter Property="Spacing" Value="12" />
+    </Style>
+
+    <!-- Main Content Styles -->
+    <Style x:Key="MainContentStyle" TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="{StaticResource PageBackground}" />
+        <Setter Property="Padding" Value="16" />
+    </Style>
+
+    <!-- Notification Styles -->
+    <Style x:Key="NotificationStyle" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource JigaAccent}" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Start" />
+        <Setter Property="Margin" Value="0,20,0,0" />
+    </Style>
+
+    <!-- Gaming-Specific Styles -->
+    <Style x:Key="MetricValueStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource JigaAccent}" />
+        <Setter Property="FontFamily" Value="Courier New" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="GameModeStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource AccentGradient}" />
+        <Setter Property="CornerRadius" Value="16" />
+        <Setter Property="Padding" Value="12,6" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+    </Style>
+
+</ResourceDictionary> 

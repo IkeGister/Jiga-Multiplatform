@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.VideoSourceButton"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="VideoSourceRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- Video Source Colors -->
+            <Color x:Key="TwitchColor">#9147FF</Color>
+            <Color x:Key="YouTubeColor">#FF0000</Color>
+            <Color x:Key="DirectColor">#00aaff</Color>
+            <Color x:Key="InactiveColor">#333333</Color>
+            
+            <!-- Source Button Style -->
+            <Style TargetType="Border" x:Key="VideoSourceBorder">
+                <Setter Property="WidthRequest" Value="28" />
+                <Setter Property="HeightRequest" Value="28" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="Opacity" Value="0.3" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Video Source Button -->
+    <Grid>
+        <!-- Selection Indicator (Glow Effect) -->
+        <Border x:Name="SelectionGlow"
+                WidthRequest="32"
+                HeightRequest="32" 
+                CornerRadius="8"
+                Background="Transparent"
+                Stroke="{Binding SourceColor, Source={x:Reference VideoSourceRoot}}"
+                StrokeThickness="2"
+                Opacity="0"
+                Margin="-2">
+            <!-- Glow Animation -->
+            <Border.Triggers>
+                <DataTrigger TargetType="Border" 
+                           Binding="{Binding IsSelected, Source={x:Reference VideoSourceRoot}}" 
+                           Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation TargetProperty="Opacity" To="1" Duration="200" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation TargetProperty="Opacity" To="0" Duration="200" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Border.Triggers>
+        </Border>
+
+        <!-- Source Icon Container -->
+        <Border Style="{StaticResource VideoSourceBorder}"
+                Background="{Binding SourceColor, Source={x:Reference VideoSourceRoot}}"
+                x:Name="SourceContainer">
+            
+            <!-- Visual State Manager -->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup Name="SelectionStates">
+                    <VisualState Name="Unselected">
+                        <VisualState.Setters>
+                            <Setter TargetName="SourceContainer" Property="Opacity" Value="0.3" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState Name="Selected">
+                        <VisualState.Setters>
+                            <Setter TargetName="SourceContainer" Property="Opacity" Value="1.0" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState Name="Hover">
+                        <VisualState.Setters>
+                            <Setter TargetName="SourceContainer" Property="Opacity" Value="0.7" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+
+            <!-- Platform-Specific Icons -->
+            <!-- Twitch Icon -->
+            <Path x:Name="TwitchIcon"
+                  Fill="White" 
+                  Data="M4 2L2 6v14h4v4h4l4-4h6l8-6V2H4zm22 12l-4 4h-4l-4 4v-4H8V4h18v10z M14 8v6h2V8h-2z M20 8v6h2V8h-2z"
+                  WidthRequest="16"
+                  HeightRequest="16"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"
+                  IsVisible="{Binding IsTwitch, Source={x:Reference VideoSourceRoot}}" />
+
+            <!-- YouTube Icon -->
+            <Path x:Name="YouTubeIcon"
+                  Fill="White"
+                  Data="M8 5v6l6-3-6-3z"
+                  WidthRequest="16" 
+                  HeightRequest="16"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"
+                  IsVisible="{Binding IsYouTube, Source={x:Reference VideoSourceRoot}}" />
+
+            <!-- Direct Screen Icon -->
+            <Grid x:Name="DirectIcon" 
+                  IsVisible="{Binding IsDirect, Source={x:Reference VideoSourceRoot}}">
+                <Rectangle Fill="White" 
+                          WidthRequest="14" 
+                          HeightRequest="10" 
+                          CornerRadius="2"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center" />
+                <Rectangle Fill="{StaticResource DirectColor}" 
+                          WidthRequest="8" 
+                          HeightRequest="2" 
+                          CornerRadius="1"
+                          HorizontalOptions="Center"
+                          VerticalOptions="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Source Label -->
+        <Label x:Name="SourceLabel"
+               Text="{Binding SourceType, Source={x:Reference VideoSourceRoot}}"
+               FontSize="10"
+               TextColor="#aaa"
+               HorizontalOptions="Center"
+               VerticalOptions="End"
+               Margin="0,32,0,0" />
+
+        <!-- Gesture Recognizers -->
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding Command, Source={x:Reference VideoSourceRoot}}"
+                                CommandParameter="{Binding CommandParameter, Source={x:Reference VideoSourceRoot}}" />
+        </Border.GestureRecognizers>
+    </Grid>
+</ContentView> 

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView x:Class="JigaMultiplatform.Controls.LogEntryControl"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:JigaMultiplatform.ViewModels"
+             x:DataType="viewmodels:LogEntry"
+             x:Name="LogRoot">
+
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <!-- Log Level Colors -->
+            <Color x:Key="DebugColor">#666666</Color>
+            <Color x:Key="InfoColor">#00aaff</Color>
+            <Color x:Key="WarningColor">#ffaa00</Color>
+            <Color x:Key="ErrorColor">#ff4444</Color>
+            <Color x:Key="LogBackground">#111111</Color>
+            <Color x:Key="LogBorder">#222222</Color>
+            <Color x:Key="LogText">#dddddd</Color>
+            <Color x:Key="TimestampText">#888888</Color>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <!-- Log Entry Container -->
+    <Border Background="{StaticResource LogBackground}"
+            Stroke="{StaticResource LogBorder}"
+            StrokeThickness="1"
+            CornerRadius="4"
+            Padding="10,8"
+            Margin="0,0,0,2">
+
+        <!-- Hover Effect -->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup Name="CommonStates">
+                <VisualState Name="Normal">
+                    <VisualState.Setters>
+                        <Setter Property="Background" Value="{StaticResource LogBackground}" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState Name="PointerOver">
+                    <VisualState.Setters>
+                        <Setter Property="Background" Value="#181818" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4" />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="80" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Level Indicator Bar -->
+            <Rectangle Grid.Column="0"
+                      Fill="{Binding LevelColor, Source={x:Reference LogRoot}}"
+                      WidthRequest="4"
+                      HeightRequest="20"
+                      VerticalOptions="Center" />
+
+            <!-- Timestamp -->
+            <Label Grid.Column="1"
+                   Text="{Binding FormattedTime}"
+                   FontSize="10"
+                   FontFamily="Courier New"
+                   TextColor="{StaticResource TimestampText}"
+                   VerticalOptions="Center"
+                   Margin="8,0,8,0" />
+
+            <!-- Message Content -->
+            <StackLayout Grid.Column="2" 
+                       Spacing="2"
+                       VerticalOptions="Center">
+                
+                <!-- Main Message -->
+                <Label Text="{Binding Message}"
+                       FontSize="12"
+                       TextColor="{StaticResource LogText}"
+                       LineBreakMode="TailTruncation"
+                       MaxLines="1" />
+
+                <!-- Additional Details (if available) -->
+                <Label Text="{Binding Details}"
+                       FontSize="11"
+                       TextColor="#999"
+                       LineBreakMode="WordWrap"
+                       MaxLines="2"
+                       IsVisible="{Binding HasDetails}" />
+            </StackLayout>
+
+            <!-- Log Level Badge -->
+            <Border Grid.Column="3"
+                    Background="{Binding LevelColor, Source={x:Reference LogRoot}}"
+                    CornerRadius="8"
+                    Padding="6,2"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Margin="8,0,0,0">
+                
+                <Label Text="{Binding Level}"
+                       FontSize="9"
+                       FontAttributes="Bold"
+                       TextColor="White"
+                       HorizontalOptions="Center" />
+            </Border>
+        </Grid>
+
+        <!-- Copy to Clipboard Gesture -->
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer NumberOfTapsRequired="2"
+                                Command="{Binding CopyLogCommand, Source={x:Reference LogRoot}}"
+                                CommandParameter="{Binding}" />
+        </Border.GestureRecognizers>
+    </Border>
+</ContentView> 

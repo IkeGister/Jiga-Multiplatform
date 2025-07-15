@@ -4,25 +4,29 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System;
+using System.Windows.Input;
 
 namespace JigaMultiplatform.ViewModels;
 
 public abstract class BaseViewModel : INotifyPropertyChanged
 {
+    private string? _errorMessage;
     private bool _isBusy;
     private string _title = string.Empty;
     private string _subtitle = string.Empty;
 
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public string? ErrorMessage
+    {
+        get => _errorMessage;
+        set => SetProperty(ref _errorMessage, value);
+    }
+
     public bool IsBusy
     {
         get => _isBusy;
-        set
-        {
-            if (SetProperty(ref _isBusy, value))
-            {
-                OnPropertyChanged(nameof(IsNotBusy));
-            }
-        }
+        set => SetProperty(ref _isBusy, value);
     }
 
     public bool IsNotBusy => !IsBusy;
@@ -38,8 +42,6 @@ public abstract class BaseViewModel : INotifyPropertyChanged
         get => _subtitle;
         set => SetProperty(ref _subtitle, value);
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
@@ -130,5 +132,132 @@ public abstract class BaseViewModel : INotifyPropertyChanged
         
         // In a real implementation, this might show a dialog or toast
         // await Application.Current.MainPage.DisplayAlert("Error", message, "OK");
+    }
+}
+
+// Command Infrastructure
+public class RelayCommand : ICommand
+{
+    private readonly Action _execute;
+    private readonly Func<bool>? _canExecute;
+
+    public RelayCommand(Action execute, Func<bool>? canExecute = null)
+    {
+        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler? CanExecuteChanged;
+
+    public bool CanExecute(object? parameter) => _canExecute?.Invoke() ?? true;
+
+    public void Execute(object? parameter) => _execute();
+
+    public void NotifyCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
+}
+
+public class RelayCommand<T> : ICommand
+{
+    private readonly Action<T?> _execute;
+    private readonly Func<T?, bool>? _canExecute;
+
+    public RelayCommand(Action<T?> execute, Func<T?, bool>? canExecute = null)
+    {
+        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler? CanExecuteChanged;
+
+    public bool CanExecute(object? parameter) => _canExecute?.Invoke((T?)parameter) ?? true;
+
+    public void Execute(object? parameter) => _execute((T?)parameter);
+
+    public void NotifyCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
+}
+
+public class AsyncRelayCommand : ICommand
+{
+    private readonly Func<Task> _execute;
+    private readonly Func<bool>? _canExecute;
+    private bool _isExecuting;
+
+    public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute = null)
+    {
+        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler? CanExecuteChanged;
+
+    public bool CanExecute(object? parameter) => !_isExecuting && (_canExecute?.Invoke() ?? true);
+
+    public async void Execute(object? parameter)
+    {
+        if (!CanExecute(parameter))
+            return;
+
+        try
+        {
+            _isExecuting = true;
+            NotifyCanExecuteChanged();
+            await _execute();
+        }
+        finally
+        {
+            _isExecuting = false;
+            NotifyCanExecuteChanged();
+        }
+    }
+
+    public void NotifyCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+    }
+}
+
+public class AsyncRelayCommand<T> : ICommand
+{
+    private readonly Func<T?, Task> _execute;
+    private readonly Func<T?, bool>? _canExecute;
+    private bool _isExecuting;
+
+    public AsyncRelayCommand(Func<T?, Task> execute, Func<T?, bool>? canExecute = null)
+    {
+        _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        _canExecute = canExecute;
+    }
+
+    public event EventHandler? CanExecuteChanged;
+
+    public bool CanExecute(object? parameter) => !_isExecuting && (_canExecute?.Invoke((T?)parameter) ?? true);
+
+    public async void Execute(object? parameter)
+    {
+        if (!CanExecute(parameter))
+            return;
+
+        try
+        {
+            _isExecuting = true;
+            NotifyCanExecuteChanged();
+            await _execute((T?)parameter);
+        }
+        finally
+        {
+            _isExecuting = false;
+            NotifyCanExecuteChanged();
+        }
+    }
+
+    public void NotifyCanExecuteChanged()
+    {
+        CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 } 

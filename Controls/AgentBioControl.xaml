@@ -40,11 +40,11 @@
                     Background="{StaticResource AvatarGradient}"
                     Stroke="#00ff88"
                     StrokeThickness="2"
-                    CornerRadius="30"
                     WidthRequest="60"
                     HeightRequest="60">
-
-                <!-- Avatar Image or Placeholder -->
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="30" />
+                </Border.StrokeShape>
                 <Grid>
                     <!-- Placeholder if no image -->
                     <Label Text="{Binding AvatarInitials, Source={x:Reference BioRoot}}"
@@ -97,12 +97,10 @@
         </Grid>
 
         <!-- Agent Description -->
-        <Border Background="#111111"
-                Stroke="#222222"
-                StrokeThickness="1"
-                CornerRadius="8"
-                Padding="12">
-
+        <Border Background="#111111" Stroke="#222222" StrokeThickness="1" Padding="12">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
             <StackLayout Spacing="8">
                 <!-- Description Header -->
                 <Label Text="About"
@@ -119,13 +117,10 @@
         </Border>
 
         <!-- Agent Capabilities/Toolkit -->
-        <Border Background="#111111"
-                Stroke="#222222"
-                StrokeThickness="1"
-                CornerRadius="8"
-                Padding="12"
-                IsVisible="{Binding HasCapabilities, Source={x:Reference BioRoot}}">
-
+        <Border Background="#111111" Stroke="#222222" StrokeThickness="1" Padding="12" IsVisible="{Binding HasCapabilities, Source={x:Reference BioRoot}}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
             <StackLayout Spacing="8">
                 <!-- Capabilities Header -->
                 <Label Text="Capabilities"
@@ -170,13 +165,10 @@
         </Border>
 
         <!-- Voice Configuration -->
-        <Border Background="#111111"
-                Stroke="#222222"
-                StrokeThickness="1"
-                CornerRadius="8"
-                Padding="12"
-                IsVisible="{Binding HasVoiceId, Source={x:Reference BioRoot}}">
-
+        <Border Background="#111111" Stroke="#222222" StrokeThickness="1" Padding="12" IsVisible="{Binding HasVoiceId, Source={x:Reference BioRoot}}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
             <StackLayout Spacing="6">
                 <!-- Voice Header -->
                 <Label Text="Voice Profile"

@@ -12,6 +12,9 @@ public partial class CollapsibleSection : ContentView
         BindableProperty.Create(nameof(IsExpanded), typeof(bool), typeof(CollapsibleSection), true,
             propertyChanged: OnExpandedChanged);
 
+    public static readonly BindableProperty IconProperty = 
+        BindableProperty.Create(nameof(Icon), typeof(string), typeof(CollapsibleSection), "");
+
     public CollapsibleSection()
     {
         InitializeComponent();
@@ -36,6 +39,12 @@ public partial class CollapsibleSection : ContentView
         set => SetValue(IsExpandedProperty, value);
     }
 
+    public string Icon
+    {
+        get => (string)GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+
     private async void OnHeaderTapped(object sender, EventArgs e)
     {
         // Toggle expanded state
@@ -52,8 +61,8 @@ public partial class CollapsibleSection : ContentView
 
     private async Task AnimateExpandCollapse(bool isExpanding)
     {
-        // Animate chevron rotation
-        var chevronAnimation = ChevronRotation.RotateTo(isExpanding ? 0 : -90, 200, Easing.CubicInOut);
+        // Animate chevron rotation using the label directly
+        await ChevronIcon.RotateTo(isExpanding ? 0 : -90, 200, Easing.CubicInOut);
 
         if (isExpanding)
         {
@@ -65,15 +74,15 @@ public partial class CollapsibleSection : ContentView
             var fadeInAnimation = ContentContainer.FadeTo(1, 200, Easing.CubicOut);
             var scaleAnimation = ContentContainer.ScaleTo(1, 200, Easing.CubicOut);
 
-            await Task.WhenAll(chevronAnimation, fadeInAnimation, scaleAnimation);
+            await Task.WhenAll(fadeInAnimation, scaleAnimation);
         }
         else
         {
             // Animate out, then hide
-            var fadeOutAnimation = ContentContainer.FadeTo(0, 150, Easing.CubicIn);
-            var scaleAnimation = ContentContainer.ScaleTo(0.95, 150, Easing.CubicIn);
+            var fadeOutAnimation = ContentContainer.FadeTo(0, 200, Easing.CubicIn);
+            var scaleAnimation = ContentContainer.ScaleTo(0.95, 200, Easing.CubicIn);
 
-            await Task.WhenAll(chevronAnimation, fadeOutAnimation, scaleAnimation);
+            await Task.WhenAll(fadeOutAnimation, scaleAnimation);
             ContentContainer.IsVisible = false;
         }
     }

@@ -25,7 +25,6 @@
                 <Setter Property="Background" Value="{StaticResource CardBackground}" />
                 <Setter Property="Stroke" Value="{StaticResource CardBorder}" />
                 <Setter Property="StrokeThickness" Value="1" />
-                <Setter Property="CornerRadius" Value="12" />
                 <Setter Property="Padding" Value="15" />
                 <Setter Property="Margin" Value="0,0,0,15" />
             </Style>
@@ -53,6 +52,9 @@
 
     <!-- Agent Card with Visual States -->
     <Border Style="{StaticResource AgentCardBorder}" x:Name="CardBorder">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="8" />
+        </Border.StrokeShape>
         
         <!-- Visual State Manager for Selection/Hover -->
         <VisualStateManager.VisualStateGroups>
@@ -77,23 +79,18 @@
                     <VisualState.Setters>
                         <Setter TargetName="CardBorder" Property="Background" Value="{StaticResource CardHover}" />
                         <Setter TargetName="CardBorder" Property="Stroke" Value="#00ff8850" />
-                        <Setter TargetName="HoverTransform" Property="TranslationY" Value="-2" />
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
 
-        <!-- Card Content with Transform for Hover Effect -->
+        <!-- Card Content -->
         <Grid x:Name="CardContent">
-            <Grid.Transform>
-                <TranslateTransform x:Name="HoverTransform" />
-            </Grid.Transform>
             
             <!-- Selection Glow Effect -->
             <BoxView x:Name="SelectionGlow"
                      Color="{StaticResource AccentGreen}"
                      Opacity="0"
-                     CornerRadius="12"
                      Margin="-2"
                      IsVisible="False" />
 
@@ -110,11 +107,13 @@
                 <Border Grid.Row="0"
                         WidthRequest="50"
                         HeightRequest="50"
-                        CornerRadius="25"
                         Stroke="{StaticResource CardBorder}"
                         StrokeThickness="2"
                         Margin="0,0,0,10"
                         HorizontalOptions="Start">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="25" />
+                    </Border.StrokeShape>
                     
                     <!-- Avatar Image or Placeholder -->
                     <Grid>
@@ -180,13 +179,7 @@
                         <Ellipse.Triggers>
                             <DataTrigger TargetType="Ellipse" Binding="{Binding IsOnline}" Value="True">
                                 <DataTrigger.EnterActions>
-                                    <BeginStoryboard>
-                                        <Storyboard RepeatBehavior="Forever">
-                                            <DoubleAnimation TargetProperty="Opacity"
-                                                           From="1" To="0.3" Duration="1000"
-                                                           AutoReverse="True" />
-                                        </Storyboard>
-                                    </BeginStoryboard>
+                                    <!-- TODO: Implement pulse animation for online status -->
                                 </DataTrigger.EnterActions>
                             </DataTrigger>
                         </Ellipse.Triggers>
@@ -208,28 +201,30 @@
                     <Border BackgroundColor="#22313a"
                             Stroke="#2a3b3f"
                             StrokeThickness="1"
-                            CornerRadius="10"
                             Padding="6,2"
                             IsVisible="{Binding HasSpecialization}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <Label Text="{Binding PrimaryGame}"
                                FontSize="9"
                                FontAttributes="Bold"
-                               TextColor="#aaffcc"
-                               LetterSpacing="0.5" />
+                               TextColor="#aaffcc" />
                     </Border>
                     
                     <!-- Specialist Focus Tag -->
                     <Border BackgroundColor="#2a2a3a"
                             Stroke="#2a3b3f"
                             StrokeThickness="1"
-                            CornerRadius="10"
                             Padding="6,2"
                             IsVisible="{Binding HasSpecializationFocus}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
                         <Label Text="{Binding SpecializationFocus}"
                                FontSize="9"
                                FontAttributes="Bold"
-                               TextColor="#aaccff"
-                               LetterSpacing="0.5" />
+                               TextColor="#aaccff" />
                     </Border>
                 </StackLayout>
             </Grid>

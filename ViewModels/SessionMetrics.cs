@@ -21,6 +21,8 @@ public class SessionMetrics : BaseViewModel
     private string _visionLatency = "-- ms";
     private string _audioLatency = "-- ms";
     private string _apiLatency = "-- ms";
+    private string _status = "Initializing";
+    private DateTime? _sessionStartTime;
 
     public bool IsOnline
     {
@@ -134,6 +136,17 @@ public class SessionMetrics : BaseViewModel
     {
         get => _apiLatency;
         set => SetProperty(ref _apiLatency, value);
+    }
+
+    public string Status
+    {
+        get => _status;
+        set => SetProperty(ref _status, value);
+    }
+    public DateTime? SessionStartTime
+    {
+        get => _sessionStartTime;
+        set => SetProperty(ref _sessionStartTime, value);
     }
 
     public void UpdateFromApiMetrics(Models.SessionMetrics apiMetrics)

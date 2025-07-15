@@ -26,6 +26,10 @@ public class MainViewModel : BaseViewModel
     private bool _voiceChatEnabled;
     private bool _highSpeedVisionEnabled;
     private string _selectedVideoSource = "Direct";
+    private double _sidebarWidth = 250;
+    private double _rightPanelWidth = 300;
+    private bool _isSidebarExpanded = true;
+    private bool _isRightPanelExpanded = true;
 
     public MainViewModel(
         IJigaApiService apiService,
@@ -49,6 +53,8 @@ public class MainViewModel : BaseViewModel
         SelectVideoSourceCommand = new RelayCommand<string>(SelectVideoSource);
         ExecuteControlActionCommand = new AsyncRelayCommand<AgentControlAction>(ExecuteControlActionAsync);
         RefreshAgentsCommand = new AsyncRelayCommand(RefreshAgentsAsync);
+        ToggleSidebarCommand = new RelayCommand(ToggleSidebar);
+        ToggleRightPanelCommand = new RelayCommand(ToggleRightPanel);
 
         // Subscribe to service events
         SubscribeToServiceEvents();
@@ -63,6 +69,7 @@ public class MainViewModel : BaseViewModel
     public ObservableCollection<AgentControlAction> ControlActions { get; }
     public ObservableCollection<ChatMessage> ChatMessages { get; }
     public ObservableCollection<LogEntry> LogEntries { get; }
+    public ObservableCollection<LogEntry> ActivityLog => LogEntries;
 
     public Agent? SelectedAgent
     {
@@ -132,6 +139,93 @@ public class MainViewModel : BaseViewModel
         set => SetProperty(ref _selectedVideoSource, value);
     }
 
+    public double SidebarWidth
+    {
+        get => _sidebarWidth;
+        set => SetProperty(ref _sidebarWidth, value);
+    }
+
+    public double RightPanelWidth
+    {
+        get => _rightPanelWidth;
+        set => SetProperty(ref _rightPanelWidth, value);
+    }
+
+    public bool IsSidebarExpanded
+    {
+        get => _isSidebarExpanded;
+        set => SetProperty(ref _isSidebarExpanded, value);
+    }
+
+    public bool IsRightPanelExpanded
+    {
+        get => _isRightPanelExpanded;
+        set => SetProperty(ref _isRightPanelExpanded, value);
+    }
+
+    public bool HasSelectedAgent => SelectedAgent != null;
+    public bool IsTwitchSelected => SelectedVideoSource?.Equals("Twitch", StringComparison.OrdinalIgnoreCase) == true;
+    public bool IsYouTubeSelected => SelectedVideoSource?.Equals("YouTube", StringComparison.OrdinalIgnoreCase) == true;
+    public bool IsDirectSelected => SelectedVideoSource?.Equals("Direct", StringComparison.OrdinalIgnoreCase) == true;
+    public bool ShowWelcomeScreen => SelectedAgent == null;
+    public bool IsRightPanelVisible => SelectedAgent != null;
+
+    public AgentConfiguration? AgentConfiguration => SelectedAgent?.Configuration;
+
+    public string ConnectionStatusColor
+    {
+        get
+        {
+            if (IsConnected)
+                return "#00FF88"; // Green
+            if (IsConnecting)
+                return "#FFD700"; // Gold/Yellow
+            if (ConnectionStatus?.ToLower().Contains("error") == true || ConnectionStatus?.ToLower().Contains("fail") == true)
+                return "#FF4444"; // Red
+            return "#888888"; // Gray/Neutral
+        }
+    }
+
+    public string ConnectionStatusBorderColor => ConnectionStatusColor;
+
+    public string ConnectionStatusText
+    {
+        get
+        {
+            if (IsConnected)
+                return "Connected";
+            if (IsConnecting)
+                return "Connecting...";
+            if (ConnectionStatus?.ToLower().Contains("error") == true || ConnectionStatus?.ToLower().Contains("fail") == true)
+                return "Error";
+            return "Disconnected";
+        }
+    }
+
+    public string ConnectionStatusTextColor
+    {
+        get
+        {
+            if (IsConnected)
+                return "#FFFFFF"; // White
+            if (IsConnecting)
+                return "#000000"; // Black
+            if (ConnectionStatus?.ToLower().Contains("error") == true || ConnectionStatus?.ToLower().Contains("fail") == true)
+                return "#FFFFFF"; // White
+            return "#CCCCCC"; // Light gray
+        }
+    }
+
+    public string AgentStatusJson
+    {
+        get
+        {
+            if (SelectedAgent == null)
+                return "No agent selected.";
+            return JsonSerializer.Serialize(SelectedAgent, new JsonSerializerOptions { WriteIndented = true });
+        }
+    }
+
     #endregion
 
     #region Commands
@@ -142,6 +236,8 @@ public class MainViewModel : BaseViewModel
     public RelayCommand<string> SelectVideoSourceCommand { get; }
     public AsyncRelayCommand<AgentControlAction> ExecuteControlActionCommand { get; }
     public AsyncRelayCommand RefreshAgentsCommand { get; }
+    public RelayCommand ToggleSidebarCommand { get; }
+    public RelayCommand ToggleRightPanelCommand { get; }
 
     #endregion
 
@@ -164,9 +260,9 @@ public class MainViewModel : BaseViewModel
             // Create session request
             var videoSource = SelectedVideoSource switch
             {
-                "Twitch" => VideoInputSource.Twitch,
-                "YouTube" => VideoInputSource.YouTube,
-                _ => VideoInputSource.DirectScreen
+                "Twitch" => "twitch",
+                "YouTube" => "youtube",
+                _ => "direct_screen"
             };
 
             var sessionRequest = _configService.ToSessionCreationRequest(
@@ -285,6 +381,16 @@ public class MainViewModel : BaseViewModel
             SelectedVideoSource = source;
             AddLogEntry("INFO", $"Video source changed to: {source}");
         }
+    }
+
+    private void ToggleSidebar()
+    {
+        IsSidebarExpanded = !IsSidebarExpanded;
+    }
+
+    private void ToggleRightPanel()
+    {
+        IsRightPanelExpanded = !IsRightPanelExpanded;
     }
 
     private async Task ExecuteControlActionAsync(AgentControlAction? action)
@@ -413,7 +519,11 @@ public class MainViewModel : BaseViewModel
                 var metricsResponse = await _apiService.GetSessionMetricsAsync(CurrentSession.SessionId);
                 if (metricsResponse.Success && metricsResponse.Data != null)
                 {
-                    LiveMetrics = metricsResponse.Data;
+                    if (LiveMetrics == null)
+                    {
+                        LiveMetrics = new SessionMetrics();
+                    }
+                    LiveMetrics.UpdateFromApiMetrics(metricsResponse.Data);
                 }
                 
                 await Task.Delay(2000); // Poll every 2 seconds
@@ -534,35 +644,4 @@ public class MainViewModel : BaseViewModel
     }
 
     #endregion
-}
-
-// Supporting classes for UI data binding
-public class ChatMessage
-{
-    public string Text { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; }
-    public bool IsFromUser { get; set; }
-    public bool IsFromAgent { get; set; }
-    public string SenderName { get; set; } = string.Empty;
-}
-
-public class LogEntry
-{
-    public DateTime Timestamp { get; set; }
-    public string Level { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-}
-
-public enum LogLevel
-{
-    Info,
-    Warning,
-    Error
-}
-
-public class MetricItem
-{
-    public string Label { get; set; } = string.Empty;
-    public string Value { get; set; } = string.Empty;
-    public string Format { get; set; } = "number";
 } 

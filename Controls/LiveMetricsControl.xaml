@@ -33,8 +33,10 @@
         <Border Background="{StaticResource MetricBackground}"
                 Stroke="{StaticResource MetricBorder}"
                 StrokeThickness="1"
-                CornerRadius="8"
                 Padding="12">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
 
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -52,21 +54,7 @@
                         Margin="0,0,8,0">
                     
                     <!-- Pulsing animation for online status -->
-                    <Ellipse.Triggers>
-                        <DataTrigger TargetType="Ellipse" 
-                                   Binding="{Binding IsOnline}" 
-                                   Value="True">
-                            <DataTrigger.EnterActions>
-                                <BeginStoryboard>
-                                    <Storyboard RepeatBehavior="Forever">
-                                        <DoubleAnimation TargetProperty="Opacity" 
-                                                       From="1" To="0.3" Duration="1000"
-                                                       AutoReverse="True" />
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </DataTrigger.EnterActions>
-                        </DataTrigger>
-                    </Ellipse.Triggers>
+                    <!-- REMOVE all <DoubleAnimation> and related animation blocks. Leave a TODO comment if animation is needed. -->
                 </Ellipse>
 
                 <!-- Session Status Text -->
@@ -107,9 +95,11 @@
                     Background="{StaticResource MetricGradient}"
                     Stroke="{StaticResource MetricBorder}"
                     StrokeThickness="1"
-                    CornerRadius="8"
                     Padding="12"
                     Margin="0,0,6,6">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
 
                 <StackLayout Spacing="4">
                     <Label Text="{Binding FramesProcessed}"
@@ -133,9 +123,11 @@
                     Background="{StaticResource MetricGradient}"
                     Stroke="{StaticResource MetricBorder}"
                     StrokeThickness="1"
-                    CornerRadius="8"
                     Padding="12"
                     Margin="6,0,0,6">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
 
                 <StackLayout Spacing="4">
                     <Label Text="{Binding MessagesSent}"
@@ -159,9 +151,11 @@
                     Background="{StaticResource MetricGradient}"
                     Stroke="{StaticResource MetricBorder}"
                     StrokeThickness="1"
-                    CornerRadius="8"
                     Padding="12"
                     Margin="0,6,6,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
 
                 <StackLayout Spacing="4">
                     <Label Text="{Binding VoiceInteractions}"
@@ -185,9 +179,11 @@
                     Background="{StaticResource MetricGradient}"
                     Stroke="{StaticResource MetricBorder}"
                     StrokeThickness="1"
-                    CornerRadius="8"
                     Padding="12"
                     Margin="6,6,0,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
 
                 <StackLayout Spacing="4">
                     <Label Text="{Binding ProcessingSpeed}"
@@ -211,8 +207,10 @@
         <Border Background="{StaticResource MetricBackground}"
                 Stroke="{StaticResource MetricBorder}"
                 StrokeThickness="1"
-                CornerRadius="8"
                 Padding="12">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
 
             <StackLayout Spacing="8">
                 <!-- Connection Header -->

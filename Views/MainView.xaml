@@ -37,14 +37,12 @@
                 <Setter Property="FontSize" Value="24" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="{StaticResource TextPrimary}" />
-                <Setter Property="LetterSpacing" Value="2" />
             </Style>
             
             <Style TargetType="Label" x:Key="SectionTitleStyle">
                 <Setter Property="FontSize" Value="12" />
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="{StaticResource TextSecondary}" />
-                <Setter Property="LetterSpacing" Value="1" />
             </Style>
             
             <Style TargetType="Button" x:Key="ControlButtonPrimaryStyle">
@@ -109,7 +107,7 @@
 
                         <!-- JIGA Logo -->
                         <StackLayout Grid.Column="0" IsVisible="{Binding IsSidebarExpanded}" Spacing="6" HorizontalOptions="Start">
-                            <Image Source="Jiga-Icon-v1.png"
+                            <Image Source="jiga_icon_v1.png"
                                    HeightRequest="64"
                                    WidthRequest="64"
                                    Aspect="AspectFit"
@@ -117,7 +115,6 @@
                             <Label Text="Joint Intelligence Gaming Assistants"
                                    FontSize="11"
                                    TextColor="{StaticResource TextSecondary}"
-                                   LetterSpacing="1"
                                    HorizontalOptions="Start" />
                         </StackLayout>
 
@@ -225,8 +222,10 @@
                             BackgroundColor="{Binding ConnectionStatusColor}"
                             Stroke="{Binding ConnectionStatusBorderColor}"
                             StrokeThickness="1"
-                            CornerRadius="20"
                             Padding="16,8">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20" />
+                        </Border.StrokeShape>
                         
                         <StackLayout Orientation="Horizontal" Spacing="8">
                             <Ellipse WidthRequest="8" HeightRequest="8"
@@ -248,7 +247,7 @@
                     <Grid IsVisible="{Binding ShowWelcomeScreen}">
                         
                         <!-- Welcome Background Image -->
-                        <Image Source="5Dof-Quote-No1-v3.png"
+                        <Image Source="dof_quote_no1_v3.png"
                                Aspect="AspectFill"
                                Opacity="0.38"
                                HorizontalOptions="Fill"
@@ -279,11 +278,12 @@
                         <Border Background="#000000BB"
                                 Stroke="#ffffff20"
                                 StrokeThickness="1"
-                                CornerRadius="14"
                                 Padding="24,24,18,18"
                                 MinimumHeightRequest="340"
                                 MaximumHeightRequest="520">
-                            
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14" />
+                            </Border.StrokeShape>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -319,9 +319,10 @@
                         <Border Background="#ffffff0d"
                                 Stroke="#ffffff1a"
                                 StrokeThickness="1"
-                                CornerRadius="12"
                                 Padding="16">
-                            
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
                             <StackLayout Spacing="15">
                                 
                                 <!-- Control Buttons -->
@@ -349,10 +350,11 @@
                         <Border Background="#00000080"
                                 Stroke="#ffffff1a"
                                 StrokeThickness="1"
-                                CornerRadius="12"
                                 Padding="0"
                                 Margin="0,32,0,0">
-                            
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -374,9 +376,10 @@
                                         Background="#00000080"
                                         Stroke="#ffffff1a"
                                         StrokeThickness="1"
-                                        CornerRadius="8"
                                         Margin="20,16,20,20">
-                                    
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="8" />
+                                    </Border.StrokeShape>
                                     <CollectionView ItemsSource="{Binding ActivityLog}"
                                                   BackgroundColor="Transparent"
                                                   Margin="15">
@@ -394,10 +397,11 @@
                         <Border Background="#00000080"
                                 Stroke="#ffffff1a"
                                 StrokeThickness="1"
-                                CornerRadius="12"
                                 Padding="0"
                                 Margin="0,18,0,0">
-                            
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12" />
+                            </Border.StrokeShape>
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -461,7 +465,6 @@
                                FontSize="18"
                                FontAttributes="Bold"
                                TextColor="{StaticResource TextPrimary}"
-                               LetterSpacing="1"
                                IsVisible="{Binding IsRightPanelExpanded}" />
 
                         <!-- Collapse Button -->
@@ -485,21 +488,21 @@
                         <controls:CollapsibleSection Title="AGENT BIO"
                                                    Icon="👤"
                                                    IsExpanded="True">
-                            <controls:AgentBioControl DataContext="{Binding SelectedAgent}" />
+                            <controls:AgentBioControl BindingContext="{Binding SelectedAgent}" />
                         </controls:CollapsibleSection>
 
                         <!-- Live Metrics Section -->
                         <controls:CollapsibleSection Title="LIVE METRICS"
                                                    Icon="📊"
                                                    IsExpanded="True">
-                            <controls:LiveMetricsControl DataContext="{Binding LiveMetrics}" />
+                            <controls:LiveMetricsControl BindingContext="{Binding LiveMetrics}" />
                         </controls:CollapsibleSection>
 
                         <!-- Configuration Section -->
                         <controls:CollapsibleSection Title="CONFIGURATION"
                                                    Icon="⚙️"
                                                    IsExpanded="True">
-                            <controls:ConfigurationControl DataContext="{Binding AgentConfiguration}" />
+                            <controls:ConfigurationControl BindingContext="{Binding AgentConfiguration}" />
                         </controls:CollapsibleSection>
 
                     </StackLayout>

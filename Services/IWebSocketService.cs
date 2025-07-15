@@ -193,29 +193,4 @@ public class WebSocketConnectionStats
     public int ReconnectAttempts { get; set; }
     public double AverageLatencyMs { get; set; }
     public bool IsHealthy { get; set; } = true;
-}
-
-/// <summary>
-/// Vision analysis result from WebSocket
-/// </summary>
-public class VisionAnalysisResult
-{
-    public string Type { get; set; } = string.Empty;
-    public Dictionary<string, object>? Data { get; set; }
-    public List<Detection>? Detections { get; set; }
-    public double ProcessingLatencyMs { get; set; }
-    public double Confidence { get; set; }
-    public string ProcessingMode { get; set; } = string.Empty;
-    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
-}
-
-/// <summary>
-/// Detection result from vision analysis
-/// </summary>
-public class Detection
-{
-    public string Type { get; set; } = string.Empty;
-    public double Confidence { get; set; }
-    public Dictionary<string, object>? BoundingBox { get; set; }
-    public Dictionary<string, object>? Properties { get; set; }
 } 

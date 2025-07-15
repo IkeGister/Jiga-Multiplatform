@@ -16,7 +16,6 @@
             <Style TargetType="Border" x:Key="VideoSourceBorder">
                 <Setter Property="WidthRequest" Value="28" />
                 <Setter Property="HeightRequest" Value="28" />
-                <Setter Property="CornerRadius" Value="6" />
                 <Setter Property="StrokeThickness" Value="0" />
                 <Setter Property="Opacity" Value="0.3" />
             </Style>
@@ -29,30 +28,24 @@
         <Border x:Name="SelectionGlow"
                 WidthRequest="32"
                 HeightRequest="32" 
-                CornerRadius="8"
                 Background="Transparent"
                 Stroke="{Binding SourceColor, Source={x:Reference VideoSourceRoot}}"
                 StrokeThickness="2"
                 Opacity="0"
                 Margin="-2">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
             <!-- Glow Animation -->
             <Border.Triggers>
                 <DataTrigger TargetType="Border" 
                            Binding="{Binding IsSelected, Source={x:Reference VideoSourceRoot}}" 
                            Value="True">
                     <DataTrigger.EnterActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation TargetProperty="Opacity" To="1" Duration="200" />
-                            </Storyboard>
-                        </BeginStoryboard>
+                        <!-- TODO: Implement animation for Opacity -->
                     </DataTrigger.EnterActions>
                     <DataTrigger.ExitActions>
-                        <BeginStoryboard>
-                            <Storyboard>
-                                <DoubleAnimation TargetProperty="Opacity" To="0" Duration="200" />
-                            </Storyboard>
-                        </BeginStoryboard>
+                        <!-- TODO: Implement animation for Opacity -->
                     </DataTrigger.ExitActions>
                 </DataTrigger>
             </Border.Triggers>
@@ -62,6 +55,9 @@
         <Border Style="{StaticResource VideoSourceBorder}"
                 Background="{Binding SourceColor, Source={x:Reference VideoSourceRoot}}"
                 x:Name="SourceContainer">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="6" />
+            </Border.StrokeShape>
             
             <!-- Visual State Manager -->
             <VisualStateManager.VisualStateGroups>
@@ -108,18 +104,24 @@
             <!-- Direct Screen Icon -->
             <Grid x:Name="DirectIcon" 
                   IsVisible="{Binding IsDirect, Source={x:Reference VideoSourceRoot}}">
-                <Rectangle Fill="White" 
-                          WidthRequest="14" 
-                          HeightRequest="10" 
-                          CornerRadius="2"
-                          HorizontalOptions="Center"
-                          VerticalOptions="Center" />
-                <Rectangle Fill="{StaticResource DirectColor}" 
-                          WidthRequest="8" 
-                          HeightRequest="2" 
-                          CornerRadius="1"
-                          HorizontalOptions="Center"
-                          VerticalOptions="Center" />
+                <Border Background="White" 
+                       WidthRequest="14" 
+                       HeightRequest="10" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="2" />
+                    </Border.StrokeShape>
+                </Border>
+                <Border Background="{StaticResource DirectColor}" 
+                       WidthRequest="8" 
+                       HeightRequest="2" 
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="1" />
+                    </Border.StrokeShape>
+                </Border>
             </Grid>
         </Border>
 

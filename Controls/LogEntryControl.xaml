@@ -24,9 +24,12 @@
     <Border Background="{StaticResource LogBackground}"
             Stroke="{StaticResource LogBorder}"
             StrokeThickness="1"
-            CornerRadius="4"
             Padding="10,8"
             Margin="0,0,0,2">
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="8" />
+        </Border.StrokeShape>
 
         <!-- Hover Effect -->
         <VisualStateManager.VisualStateGroups>
@@ -92,11 +95,13 @@
             <!-- Log Level Badge -->
             <Border Grid.Column="3"
                     Background="{Binding LevelColor, Source={x:Reference LogRoot}}"
-                    CornerRadius="8"
                     Padding="6,2"
                     HorizontalOptions="Center"
                     VerticalOptions="Center"
                     Margin="8,0,0,0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 
                 <Label Text="{Binding Level}"
                        FontSize="9"

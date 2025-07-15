@@ -11,7 +11,7 @@ public class AgentConfigurationService : IAgentConfigurationService
     public SessionRequest ToSessionCreationRequest(
         Agent agent, 
         string userId, 
-        VideoInputSource videoSource = VideoInputSource.DirectScreen,
+        string videoSource = "direct_screen",
         SessionCustomizations? customizations = null)
     {
         customizations ??= new SessionCustomizations();
@@ -45,9 +45,9 @@ public class AgentConfigurationService : IAgentConfigurationService
         
         return new HighSpeedConfiguration
         {
-            TargetFps = config.TargetFps ?? 3.0,
-            AnalysisInterval = config.AnalysisInterval ?? 0.5,
-            MaxConcurrentAnalyses = config.MaxConcurrentAnalyses ?? 10,
+            TargetFps = config.TargetFps,
+            AnalysisInterval = config.AnalysisInterval,
+            MaxConcurrentAnalyses = config.MaxConcurrentAnalyses,
             CompressionLevel = "high",
             EnableCaching = true
         };
@@ -78,7 +78,7 @@ public class AgentConfigurationService : IAgentConfigurationService
         };
     }
 
-    public VideoSourceConfiguration ExtractVideoSourceConfig(VideoInputSource videoSource, SessionCustomizations? customizations = null)
+    public VideoSourceConfiguration ExtractVideoSourceConfig(string videoSource, SessionCustomizations? customizations = null)
     {
         customizations ??= new SessionCustomizations();
         
@@ -86,17 +86,17 @@ public class AgentConfigurationService : IAgentConfigurationService
         
         switch (videoSource)
         {
-            case VideoInputSource.Twitch:
+            case "twitch":
                 properties["channel_name"] = customizations.TwitchChannel ?? "example_channel";
                 properties["quality"] = customizations.TwitchQuality ?? "best";
                 break;
                 
-            case VideoInputSource.Youtube:
+            case "youtube":
                 properties["url"] = customizations.YouTubeUrl ?? "";
                 properties["quality"] = customizations.YouTubeQuality ?? "best";
                 break;
                 
-            case VideoInputSource.DirectScreen:
+            case "direct_screen":
             default:
                 properties["resolution"] = "480x270";
                 properties["quality"] = 50;
@@ -409,65 +409,64 @@ public class AgentConfigurationService : IAgentConfigurationService
     }
 
     // Internal helper methods
-    private Dictionary<string, object> ExtractHighSpeedConfigInternal(AgentConfiguration config)
+    private JigaMultiplatform.Models.HighSpeedConfiguration ExtractHighSpeedConfigInternal(JigaMultiplatform.Models.AgentConfiguration config)
     {
-        return new Dictionary<string, object>
+        return new JigaMultiplatform.Models.HighSpeedConfiguration
         {
-            ["target_fps"] = config.TargetFps ?? 3.0,
-            ["analysis_interval"] = config.AnalysisInterval ?? 0.5,
-            ["max_concurrent_analyses"] = config.MaxConcurrentAnalyses ?? 10,
-            ["compression_level"] = "high",
-            ["enable_caching"] = true
+            TargetFps = config.TargetFps,
+            AnalysisInterval = config.AnalysisInterval,
+            MaxConcurrentAnalyses = config.MaxConcurrentAnalyses,
+            CompressionLevel = "high",
+            EnableCaching = true
         };
     }
 
-    private Dictionary<string, object> ExtractVoiceChatConfigInternal(Agent agent, SessionCustomizations customizations)
+    private JigaMultiplatform.Models.VoiceChatConfiguration ExtractVoiceChatConfigInternal(JigaMultiplatform.Models.Agent agent, JigaMultiplatform.Models.SessionCustomizations customizations)
     {
-        return new Dictionary<string, object>
+        return new JigaMultiplatform.Models.VoiceChatConfiguration
         {
-            ["response_type"] = "base64_audio",
-            ["audio_format"] = "wav",
-            ["sample_rate"] = 22050,
-            ["channels"] = 1,
-            ["auto_voice_activation"] = true,
-            ["voice_activation_threshold"] = 0.3,
-            ["continuous_listening"] = true,
-            ["enable_team_messaging"] = agent.Toolkit.Contains("team_messaging"),
-            ["voice_quality"] = "standard",
-            ["enable_noise_suppression"] = true,
-            ["enable_echo_cancellation"] = true,
-            ["max_recording_duration"] = 30,
-            ["silence_timeout"] = 2.0,
-            ["voice_id"] = customizations.VoiceId ?? agent.VoiceId,
-            ["nationality"] = agent.Nationality,
-            ["language"] = agent.Language
+            ResponseType = "base64_audio",
+            AudioFormat = "wav",
+            SampleRate = 22050,
+            Channels = 1,
+            AutoVoiceActivation = true,
+            VoiceActivationThreshold = 0.3,
+            ContinuousListening = true,
+            EnableTeamMessaging = agent.Toolkit.Contains("team_messaging"),
+            VoiceQuality = "standard",
+            EnableNoiseSuppression = true,
+            EnableEchoCancellation = true,
+            MaxRecordingDuration = 30,
+            SilenceTimeout = 2.0,
+            VoiceId = customizations.VoiceId ?? agent.VoiceId,
+            Nationality = agent.Nationality,
+            Language = agent.Language
         };
     }
 
-    private Dictionary<string, object> ExtractVideoSourceConfigInternal(VideoInputSource videoSource, SessionCustomizations customizations)
+    private JigaMultiplatform.Models.VideoSourceConfiguration ExtractVideoSourceConfigInternal(string videoSource, JigaMultiplatform.Models.SessionCustomizations customizations)
     {
-        return videoSource switch
+        var properties = new Dictionary<string, object>();
+        switch (videoSource)
         {
-            VideoInputSource.Twitch => new Dictionary<string, object>
-            {
-                ["channel_name"] = customizations.TwitchChannel ?? "example_channel",
-                ["quality"] = customizations.TwitchQuality ?? "best"
-            },
-            VideoInputSource.Youtube => new Dictionary<string, object>
-            {
-                ["url"] = customizations.YouTubeUrl ?? "",
-                ["quality"] = customizations.YouTubeQuality ?? "best"
-            },
-            VideoInputSource.DirectScreen => new Dictionary<string, object>
-            {
-                ["resolution"] = "480x270",
-                ["quality"] = 50
-            },
-            _ => new Dictionary<string, object>
-            {
-                ["resolution"] = "480x270",
-                ["quality"] = 50
-            }
+            case "twitch":
+                properties["channel_name"] = customizations.TwitchChannel ?? "example_channel";
+                properties["quality"] = customizations.TwitchQuality ?? "best";
+                break;
+            case "youtube":
+                properties["url"] = customizations.YouTubeUrl ?? "";
+                properties["quality"] = customizations.YouTubeQuality ?? "best";
+                break;
+            case "direct_screen":
+            default:
+                properties["resolution"] = "480x270";
+                properties["quality"] = 50;
+                break;
+        }
+        return new JigaMultiplatform.Models.VideoSourceConfiguration
+        {
+            Source = videoSource,
+            Properties = properties
         };
     }
 } 

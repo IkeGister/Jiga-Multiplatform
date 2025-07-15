@@ -20,25 +20,38 @@
     <Border Background="{StaticResource SectionBackground}"
             Stroke="{StaticResource SectionBorder}"
             StrokeThickness="1"
-            CornerRadius="8"
             Margin="0,0,0,12">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="8" />
+        </Border.StrokeShape>
 
         <StackLayout Spacing="0">
             
             <!-- Section Header -->
             <Border Background="{StaticResource HeaderBackground}"
-                    CornerRadius="8,8,0,0"
                     Padding="12,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8,8,0,0" />
+                </Border.StrokeShape>
 
                 <!-- Header Content -->
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Section Title -->
+                    <!-- Section Icon -->
                     <Label Grid.Column="0"
+                           Text="{Binding Icon, Source={x:Reference SectionRoot}}"
+                           FontSize="16"
+                           TextColor="{StaticResource HeaderText}"
+                           VerticalOptions="Center"
+                           Margin="0,0,8,0" />
+
+                    <!-- Section Title -->
+                    <Label Grid.Column="1"
                            Text="{Binding Title, Source={x:Reference SectionRoot}}"
                            FontSize="14"
                            FontAttributes="Bold"
@@ -46,7 +59,7 @@
                            VerticalOptions="Center" />
 
                     <!-- Expand/Collapse Chevron -->
-                    <Label Grid.Column="1"
+                    <Label Grid.Column="2"
                            x:Name="ChevronIcon"
                            Text="▼"
                            FontSize="12"
@@ -54,10 +67,6 @@
                            VerticalOptions="Center"
                            HorizontalOptions="Center">
                         
-                        <!-- Rotation Transform for Animation -->
-                        <Label.RenderTransform>
-                            <RotateTransform x:Name="ChevronRotation" Angle="0" />
-                        </Label.RenderTransform>
                     </Label>
                 </Grid>
 

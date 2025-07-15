@@ -17,16 +17,16 @@
     <Color x:Key="JigaSuccess">#00ff88</Color>
 
     <!-- Background Colors -->
-    <Color x:Key="PageBackground">{StaticResource JigaPrimary}</Color>
-    <Color x:Key="SurfaceBackground">{StaticResource JigaSecondary}</Color>
+    <Color x:Key="PageBackground">#00ff88</Color>
+    <Color x:Key="SurfaceBackground">#1a1a1a</Color>
     <Color x:Key="CardBackground">#111111</Color>
-    <Color x:Key="BorderColor">{StaticResource JigaTertiary}</Color>
+    <Color x:Key="BorderColor">#2a2a2a</Color>
 
     <!-- Text Colors -->
-    <Color x:Key="PrimaryText">{StaticResource JigaWhite}</Color>
-    <Color x:Key="SecondaryText">{StaticResource JigaLightGray}</Color>
-    <Color x:Key="TertiaryText">{StaticResource JigaGray}</Color>
-    <Color x:Key="AccentText">{StaticResource JigaAccent}</Color>
+    <Color x:Key="PrimaryText">#ffffff</Color>
+    <Color x:Key="SecondaryText">#cccccc</Color>
+    <Color x:Key="TertiaryText">#888888</Color>
+    <Color x:Key="AccentText">#00ff88</Color>
 
     <!-- JIGA Gradients -->
     <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1">
@@ -137,7 +137,6 @@
         <Setter Property="BackgroundColor" Value="{StaticResource CardBackground}" />
         <Setter Property="Stroke" Value="{StaticResource BorderColor}" />
         <Setter Property="StrokeThickness" Value="1" />
-        <Setter Property="CornerRadius" Value="8" />
         <Setter Property="Padding" Value="16" />
         <Setter Property="Shadow">
             <Shadow Brush="Black" Opacity="0.2" Radius="4" Offset="0,2" />
@@ -240,7 +239,6 @@
     <!-- Notification Styles -->
     <Style x:Key="NotificationStyle" TargetType="Border">
         <Setter Property="BackgroundColor" Value="{StaticResource JigaAccent}" />
-        <Setter Property="CornerRadius" Value="20" />
         <Setter Property="Padding" Value="12,6" />
         <Setter Property="HorizontalOptions" Value="Center" />
         <Setter Property="VerticalOptions" Value="Start" />
@@ -258,7 +256,6 @@
 
     <Style x:Key="GameModeStyle" TargetType="Border">
         <Setter Property="Background" Value="{StaticResource AccentGradient}" />
-        <Setter Property="CornerRadius" Value="16" />
         <Setter Property="Padding" Value="12,6" />
         <Setter Property="HorizontalOptions" Value="Start" />
     </Style>

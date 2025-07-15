@@ -7,6 +7,9 @@ public class JigaSession
     [JsonPropertyName("session_id")]
     public string SessionId { get; set; } = string.Empty;
 
+    [JsonPropertyName("agent_id")]
+    public string AgentId { get; set; } = string.Empty;
+
     [JsonPropertyName("user_id")]
     public string UserId { get; set; } = string.Empty;
 
@@ -88,6 +91,12 @@ public class SessionConfiguration
 
 public class VideoSourceConfiguration
 {
+    [JsonPropertyName("source")]
+    public string Source { get; set; } = string.Empty;
+
+    [JsonPropertyName("properties")]
+    public Dictionary<string, object> Properties { get; set; } = new();
+
     [JsonPropertyName("twitch_channel")]
     public string? TwitchChannel { get; set; }
 
@@ -108,45 +117,6 @@ public class ScreenCaptureConfiguration
 
     [JsonPropertyName("compression_quality")]
     public int CompressionQuality { get; set; } = 85;
-}
-
-public class VoiceChatConfiguration
-{
-    [JsonPropertyName("voice_id")]
-    public string VoiceId { get; set; } = "us_male_neural";
-
-    [JsonPropertyName("nationality")]
-    public string Nationality { get; set; } = "US";
-
-    [JsonPropertyName("language")]
-    public string Language { get; set; } = "en";
-
-    [JsonPropertyName("response_type")]
-    public string ResponseType { get; set; } = "base64_audio";
-
-    [JsonPropertyName("audio_format")]
-    public string AudioFormat { get; set; } = "wav";
-
-    [JsonPropertyName("sample_rate")]
-    public int SampleRate { get; set; } = 22050;
-
-    [JsonPropertyName("channels")]
-    public int Channels { get; set; } = 1;
-
-    [JsonPropertyName("auto_voice_activation")]
-    public bool AutoVoiceActivation { get; set; } = true;
-
-    [JsonPropertyName("voice_activation_threshold")]
-    public double VoiceActivationThreshold { get; set; } = 0.3;
-
-    [JsonPropertyName("continuous_listening")]
-    public bool ContinuousListening { get; set; } = true;
-
-    [JsonPropertyName("max_recording_duration")]
-    public int MaxRecordingDuration { get; set; } = 30;
-
-    [JsonPropertyName("silence_timeout")]
-    public double SilenceTimeout { get; set; } = 2.0;
 }
 
 public class SessionMetrics
@@ -178,6 +148,29 @@ public class SessionMetrics
     [JsonPropertyName("audio_messages_received")]
     public int AudioMessagesReceived { get; set; }
 
+    // --- Added for ViewModel/API compatibility ---
+    [JsonPropertyName("status")]
+    public string? Status { get; set; } = "Initializing";
+
+    [JsonPropertyName("messages_sent")]
+    public int MessagesSent { get; set; }
+
+    [JsonPropertyName("voice_interactions")]
+    public int VoiceInteractions { get; set; }
+
+    [JsonPropertyName("frame_rate")]
+    public double? FrameRate { get; set; }
+
+    [JsonPropertyName("message_rate")]
+    public double? MessageRate { get; set; }
+
+    [JsonPropertyName("processing_speed")]
+    public double? ProcessingSpeed { get; set; }
+
+    [JsonPropertyName("session_start_time")]
+    public DateTime? SessionStartTime { get; set; }
+    // --- End added ---
+
     // UI Helper Properties
     [JsonIgnore]
     public string AnalysisTimeText => AverageAnalysisTime > 0 ? $"{AverageAnalysisTime:F1}ms" : "N/A";
@@ -193,6 +186,9 @@ public class SessionMetrics
 
     [JsonIgnore]
     public string FpsText => $"{FramesPerSecond:F1} FPS";
+
+    [JsonIgnore]
+    public bool IsConnected { get; set; } // Set this based on your connection logic
 }
 
 public enum SessionStatus
@@ -209,11 +205,4 @@ public enum HighSpeedMode
     UltraFast,
     Balanced,
     QualityFocused
-}
-
-public enum VideoInputSource
-{
-    DirectScreen,
-    Twitch,
-    YouTube
 } 

@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg width="456" height="456" viewBox="0 0 456 456" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <rect x="0" y="0" width="456" height="456" fill="#512BD4" />
+    <!-- JIGA Dark Background -->
+    <rect x="0" y="0" width="456" height="456" fill="#0a0a0a" />
+    
+    <!-- JIGA Accent Border -->
+    <rect x="20" y="20" width="416" height="416" fill="none" stroke="#00ff88" stroke-width="8" rx="60" />
+    
+    <!-- JIGA Text -->
+    <text x="228" y="200" font-family="Arial, sans-serif" font-size="120" font-weight="bold" 
+          text-anchor="middle" fill="#ffffff">
+        J<tspan fill="#00aaff">i</tspan>GA
+    </text>
+    
+    <!-- Subtitle -->
+    <text x="228" y="280" font-family="Arial, sans-serif" font-size="32" font-weight="normal" 
+          text-anchor="middle" fill="#888888" letter-spacing="2">
+        GAMING AI
+    </text>
+    
+    <!-- Decorative Circuit Lines -->
+    <g stroke="#00ff88" stroke-width="2" fill="none" opacity="0.6">
+        <polyline points="80,350 120,350 140,330 180,330" />
+        <polyline points="276,330 316,330 336,350 376,350" />
+        <circle cx="100" cy="350" r="4" fill="#00ff88" />
+        <circle cx="356" cy="350" r="4" fill="#00ff88" />
+        <circle cx="160" cy="330" r="3" fill="#00aaff" />
+        <circle cx="296" cy="330" r="3" fill="#00aaff" />
+    </g>
 </svg>

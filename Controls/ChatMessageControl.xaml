@@ -43,11 +43,14 @@
                 Background="{Binding MessageBackground, Source={x:Reference ChatRoot}}"
                 Stroke="{Binding MessageBorder, Source={x:Reference ChatRoot}}"
                 StrokeThickness="1"
-                CornerRadius="{Binding MessageCornerRadius, Source={x:Reference ChatRoot}}"
                 Padding="12,10,18,10"
                 MaximumWidthRequest="320"
                 HorizontalOptions="{Binding MessageAlignment, Source={x:Reference ChatRoot}}"
                 Margin="{Binding MessageMargin, Source={x:Reference ChatRoot}}">
+
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="8" />
+            </Border.StrokeShape>
 
             <!-- Drop Shadow Effect -->
             <Border.Shadow>
@@ -76,10 +79,13 @@
                         Background="#222b2a"
                         Stroke="#2a3b2a"
                         StrokeThickness="1"
-                        CornerRadius="10"
                         Padding="8,6"
                         Margin="0,4,0,0">
                     
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                    </Border.StrokeShape>
+
                     <StackLayout Orientation="Horizontal" Spacing="8">
                         
                         <!-- Play Button -->
@@ -126,13 +132,7 @@
                 <Ellipse.Triggers>
                     <DataTrigger TargetType="Ellipse" Binding="{Binding IsTyping}" Value="True">
                         <DataTrigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard RepeatBehavior="Forever">
-                                    <DoubleAnimation TargetProperty="Opacity" 
-                                                   From="0.3" To="1" Duration="600"
-                                                   AutoReverse="True" />
-                                </Storyboard>
-                            </BeginStoryboard>
+                            <!-- TODO: Implement animation for IsTyping -->
                         </DataTrigger.EnterActions>
                     </DataTrigger>
                 </Ellipse.Triggers>
@@ -142,13 +142,7 @@
                 <Ellipse.Triggers>
                     <DataTrigger TargetType="Ellipse" Binding="{Binding IsTyping}" Value="True">
                         <DataTrigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard RepeatBehavior="Forever">
-                                    <DoubleAnimation TargetProperty="Opacity" 
-                                                   From="0.3" To="1" Duration="600"
-                                                   BeginTime="200" AutoReverse="True" />
-                                </Storyboard>
-                            </BeginStoryboard>
+                            <!-- TODO: Implement animation for IsTyping -->
                         </DataTrigger.EnterActions>
                     </DataTrigger>
                 </Ellipse.Triggers>
@@ -158,13 +152,7 @@
                 <Ellipse.Triggers>
                     <DataTrigger TargetType="Ellipse" Binding="{Binding IsTyping}" Value="True">
                         <DataTrigger.EnterActions>
-                            <BeginStoryboard>
-                                <Storyboard RepeatBehavior="Forever">
-                                    <DoubleAnimation TargetProperty="Opacity" 
-                                                   From="0.3" To="1" Duration="600"
-                                                   BeginTime="400" AutoReverse="True" />
-                                </Storyboard>
-                            </BeginStoryboard>
+                            <!-- TODO: Implement animation for IsTyping -->
                         </DataTrigger.EnterActions>
                     </DataTrigger>
                 </Ellipse.Triggers>

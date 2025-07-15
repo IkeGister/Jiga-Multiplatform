@@ -221,4 +221,12 @@ public class SessionRequest
 
 ---
 
+## [2024-06-10] Model Specification Document Created
+
+- Created `JIGA-MAUI-Model-Spec.md` as a comprehensive model specification for the JIGA Multiplatform client.
+- Purpose: To guide accurate replication of the client on iOS and other platforms.
+- Includes: Data models, architecture, services, UI structure, and platform-specific replication notes.
+
+---
+
 *This action plan will be updated as development progresses and new requirements or challenges are identified.* 

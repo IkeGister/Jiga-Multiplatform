@@ -39,10 +39,10 @@
             <!-- Vision Configuration Section -->
             <Border Background="{StaticResource ConfigBackground}"
                     Stroke="{StaticResource ConfigBorder}"
-                    StrokeThickness="1"
-                    CornerRadius="8"
-                    Padding="16">
-
+                    StrokeThickness="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 <StackLayout Spacing="12">
                     <!-- Section Header -->
                     <Label Text="Vision Settings"
@@ -133,10 +133,10 @@
             <!-- Audio Configuration Section -->
             <Border Background="{StaticResource ConfigBackground}"
                     Stroke="{StaticResource ConfigBorder}"
-                    StrokeThickness="1"
-                    CornerRadius="8"
-                    Padding="16">
-
+                    StrokeThickness="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 <StackLayout Spacing="12">
                     <!-- Section Header -->
                     <Label Text="Audio Settings"
@@ -218,10 +218,10 @@
             <!-- Performance Configuration Section -->
             <Border Background="{StaticResource ConfigBackground}"
                     Stroke="{StaticResource ConfigBorder}"
-                    StrokeThickness="1"
-                    CornerRadius="8"
-                    Padding="16">
-
+                    StrokeThickness="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 <StackLayout Spacing="12">
                     <!-- Section Header -->
                     <Label Text="Performance Settings"
@@ -295,10 +295,10 @@
             <!-- Advanced Settings Section -->
             <Border Background="{StaticResource ConfigBackground}"
                     Stroke="{StaticResource ConfigBorder}"
-                    StrokeThickness="1"
-                    CornerRadius="8"
-                    Padding="16">
-
+                    StrokeThickness="1">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
                 <StackLayout Spacing="12">
                     <!-- Section Header -->
                     <Label Text="Advanced Settings"

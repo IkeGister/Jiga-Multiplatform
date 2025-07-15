@@ -19,7 +19,7 @@ public interface IAgentConfigurationService
     SessionRequest ToSessionCreationRequest(
         Agent agent, 
         string userId, 
-        VideoInputSource videoSource = VideoInputSource.DirectScreen,
+        string videoSource = "direct_screen",
         SessionCustomizations? customizations = null);
 
     /// <summary>
@@ -43,7 +43,7 @@ public interface IAgentConfigurationService
     /// <param name="videoSource">Video input source type</param>
     /// <param name="customizations">User customizations</param>
     /// <returns>Video source configuration</returns>
-    VideoSourceConfiguration ExtractVideoSourceConfig(VideoInputSource videoSource, SessionCustomizations? customizations = null);
+    VideoSourceConfiguration ExtractVideoSourceConfig(string videoSource, SessionCustomizations? customizations = null);
 
     /// <summary>
     /// Get WebSocket endpoints for a session based on agent capabilities
@@ -67,42 +67,6 @@ public interface IAgentConfigurationService
     /// <param name="agent">Agent configuration</param>
     /// <returns>List of metrics to display</returns>
     List<MetricConfiguration> GetMetricsConfiguration(Agent agent);
-}
-
-/// <summary>
-/// Session customizations for overriding agent defaults
-/// </summary>
-public class SessionCustomizations
-{
-    public bool? IsAdmin { get; set; }
-    public string? Permissions { get; set; }
-    public Dictionary<string, object>? Preferences { get; set; }
-    public string? VoiceId { get; set; }
-    public string? TwitchChannel { get; set; }
-    public string? YouTubeUrl { get; set; }
-    public string? TwitchQuality { get; set; }
-    public string? YouTubeQuality { get; set; }
-}
-
-/// <summary>
-/// High-speed vision configuration
-/// </summary>
-public class HighSpeedConfiguration
-{
-    public double TargetFps { get; set; } = 3.0;
-    public double AnalysisInterval { get; set; } = 0.5;
-    public int MaxConcurrentAnalyses { get; set; } = 10;
-    public string CompressionLevel { get; set; } = "high";
-    public bool EnableCaching { get; set; } = true;
-}
-
-/// <summary>
-/// Video source configuration
-/// </summary>
-public class VideoSourceConfiguration
-{
-    public VideoInputSource Source { get; set; }
-    public Dictionary<string, object> Properties { get; set; } = new();
 }
 
 /// <summary>
